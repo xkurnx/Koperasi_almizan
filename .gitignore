@@ -1,4 +1,13 @@
-*/config/development
+*~
+.DS_Store
+.svn
+.gitignore
+.cvs
+*.bak
+*.swp
+Thumbs.db
+application/.htaccess
+application/config/database.php*/config/development
 */logs/log-*.php
 */logs/!index.html
 */cache/*
