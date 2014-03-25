@@ -52,6 +52,19 @@ class Laporan extends CI_Controller {
 		$this->load->view('laporanView', $data);	
 	}
 	
+	function daftar_simpanan($tahun){
+		$this->kur_auth->is_logged_in();
+		$data_table['base_url'] = site_url('laporan/daftar_simpanan');
+		$data_table['trans'] = $this->Laporan_model->daftar_simpanan($tahun)->result();
+		$data['name_login'] = $this->session->userdata('kop_sess_username');
+		print_r($data_table['trans']);
+		// load view
+		$html_table = $this->load->view('tableKasHarian', $data_table,true);
+		$data['role_user'] = $this->session->userdata('kop_sess_role');		
+		$data['html_table'] = $html_table;
+		$this->load->view('laporanView', $data);	
+	}
+	
 	
 	
 	
