@@ -26,8 +26,7 @@ class Laporan extends CI_Controller {
 		$this->kur_auth->is_logged_in();
 		$this->kur_auth->allowed(array(0));
 		$periode = '201302';
-		$this->transaksi_harian($periode);
-		
+		$this->transaksi_harian($periode);	
 		
 	}
 	
@@ -64,6 +63,8 @@ class Laporan extends CI_Controller {
 		$data['html_table'] = $html_table;
 		$this->load->view('laporanView', $data);	
 	}
+	
+	
 	
 	
 	

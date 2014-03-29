@@ -17,26 +17,36 @@ class Keuangan_model extends CI_Model {
 		return $this->db->count_all($this->tbl_person);
 	}
 	
-	/* mengambil 10 transaksi terakhir */
-	function fetch_recent_trans_id($id){
-	$sql = "select idx,date_format(tgl_trans,'%d-%m-%Y') tgl_trans_format,jenis,nilai,ket,tabel,
-				case when DATE_ADD(tgl_input,INTERVAL 2 DAY) <= now() OR tgl_input is null then 0 else 1 end is_deletable from
-			( select idx,tgl_trans,tgl_input, 
-							concat(case when nilai < 0 then 'penarikan' else 'penyetoran' end,' ',kode_simpanan) as jenis,nilai,ket,'simpanan' tabel
-							from d_simpanan				
-							where id_anggota=$id
-			union
-					select idx,tgl_trans,tgl_input,concat('Agsrn - ',m.ket),nilai,a.ket,'angsuran' tabel from d_angsuran a,m_murabahah m
-					where a.id_mrbh = m.id_mrbh
-					and id_anggota=$id
-			union
-					select idx,tgl_trans,tgl_input,concat(case when nilai < 0 then 'penarikan' else 'kontribusi jasa ' end,' ',kode_berek),nilai,ket,'berek' tabel
-							from d_berek b
-					where id_anggota=$id 
-			) as h      
-						 order by tgl_trans desc
-        
-";
+	/* 
+	mengambil 10 transaksi terakhir, 
+	atau per periode 
+	*/
+	function fetch_recent_trans_id($id,$periode = '' ){
+				/* untuk per periode */
+				$query_tgl_trans = ($periode == '' ) ? "":"and date_format(tgl_trans,'%Y%m')='$periode'";
+	
+				$sql = "select idx,date_format(tgl_trans,'%d-%m-%Y') tgl_trans_format,jenis,nilai,ket,tabel,
+							case when DATE_ADD(tgl_input,INTERVAL 2 DAY) <= now() OR tgl_input is null then 0 else 1 end is_deletable from
+						( select idx,tgl_trans,tgl_input, 
+										concat(case when nilai < 0 then 'penarikan' else 'penyetoran' end,' ',kode_simpanan) as jenis,nilai,ket,'simpanan' tabel
+										from d_simpanan				
+										where id_anggota=$id
+										$query_tgl_trans
+						union
+								select idx,tgl_trans,tgl_input,concat('Agsrn - ',m.ket),nilai,a.ket,'angsuran' tabel from d_angsuran a,m_murabahah m
+								where a.id_mrbh = m.id_mrbh
+								and id_anggota=$id
+								$query_tgl_trans
+						union
+								select idx,tgl_trans,tgl_input,concat(case when nilai < 0 then 'penarikan' else 'kontribusi jasa ' end,' ',kode_berek),nilai,ket,'berek' tabel
+										from d_berek b
+								where id_anggota=$id 
+								$query_tgl_trans
+						) as h      
+									 order by tgl_trans desc
+					
+			";
+				#echo "<pre>$sql</pre>" ;
 				$data = $this->db->query($sql);
 				return $data;	
 			

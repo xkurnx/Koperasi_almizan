@@ -154,6 +154,30 @@ class Laporan_model extends CI_Model {
 		$data = $this->db->query($sql);
 		return $data;		
 		}
+		
+		
+		function daftar_simpanan($tahun){
+			$sql = "select nama,s_simpanan.* from m_anggota 
+					left outer join
+					(   select d_simpanan.id_anggota,
+						sum(case when kode_simpanan='SP' and upper(ket) = 'DATA AWAL MIGRASI' then nilai else 0 end) SP_THNLALU,
+						sum(case when kode_simpanan='SW' and upper(ket) = 'DATA AWAL MIGRASI' then nilai else 0 end) SW_THNLALU,
+						sum(case when kode_simpanan='SW' and upper(ket) <> 'DATA AWAL MIGRASI' and DATE_FORMAT(tgl_trans, '%Y')='$tahun' AND nilai>=0 then nilai else 0 end) SW_MASUK,
+						sum(case when kode_simpanan='SW' and upper(ket) <> 'DATA AWAL MIGRASI' and DATE_FORMAT(tgl_trans, '%Y')='$tahun' AND nilai<0 then nilai else 0 end) SW_KELUAR,
+						sum(case when kode_simpanan='SK' and upper(ket) = 'DATA AWAL MIGRASI' then nilai else 0 end) SK_THNLALU,
+						sum(case when kode_simpanan='SK' and upper(ket) <> 'DATA AWAL MIGRASI' and DATE_FORMAT(tgl_trans, '%Y')='$tahun' AND nilai>=0 then nilai else 0 end) SK_MASUK,
+						sum(case when kode_simpanan='SK' and upper(ket) <> 'DATA AWAL MIGRASI' and DATE_FORMAT(tgl_trans, '%Y')='$tahun' AND nilai<0 then nilai else 0 end) SK_KELUAR
+						from d_simpanan,m_anggota
+						where d_simpanan.id_anggota = m_anggota.id_anggota
+						-- and upper(ket) <> 'DATA AWAL MIGRASI'
+						and DATE_FORMAT(tgl_trans, '%Y')='$tahun'
+						group by id_anggota
+						order by id_anggota asc
+					) s_simpanan
+					on m_anggota.id_anggota = s_simpanan.id_anggota ";		
+			$data = $this->db->query($sql);
+			return $data;
+		}
 		 
 		
 	 

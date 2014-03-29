@@ -9,7 +9,7 @@ class Anggota extends CI_Controller {
 	{
 		parent::__construct();
 		// load library
-		$this->load->library(array('table','form_validation','session'));
+		$this->load->library(array('table','form_validation','session','kur_functions'));
 		$this->limit = 20;
 		
 		// load helper
@@ -91,6 +91,20 @@ class Anggota extends CI_Controller {
 		$this->_view($id);	
 	}
 	
+	function cetak( $id,$periode='' ){
+		$this->kur_auth->is_logged_in();
+		$this->kur_auth->allowed(array(0));
+		$this->_cetak($id,$periode);	
+	}
+	
+	/* untuk halaman member, sekalian halaman detail dr web,
+		berisi :
+		- profile anggota
+		- Rekap Simpanan
+		- Rekap Belanja & Rekening
+		- Rekap Murabahah
+		- 15 Transaksi Terakhir
+		*/
 	private function _view($id)
 	{
 		// set common properties
@@ -111,6 +125,32 @@ class Anggota extends CI_Controller {
 		
 		// load view
 		$this->load->view('personView', $data);
+	}
+	
+	/* untuk halaman cetak rekap dan transaksi anggota per bulan
+		berisi :
+		- profile anggota
+		- Rekap Simpanan
+		- Rekap Belanja & Rekening
+		- Rekap Murabahah
+		- 15 Transaksi Terakhir
+		*/
+	
+	private function _cetak($id,$periode)	
+	{
+		// set common properties
+		// get person details
+		$data['person'] = $this->Anggota_model->get_by_id($id)->row();
+		$data['periode_to_text'] = $this->kur_functions->periode_to_text($periode);
+		// get keuangan details
+		$data['simpanan'] = $this->Keuangan_model->fetch_jumlah_simpanan_id($id)->row();
+		$data['murabahah'] = $this->Keuangan_model->fetch_rekap_murabahah_id($id)->result();
+		$data['trans'] = $this->Keuangan_model->fetch_recent_trans_id($id,$periode)->result();
+		$data['berek'] = $this->Keuangan_model->fetch_jumlah_berek_id($id)->row();
+		$data['role_user'] = $this->session->userdata('kop_sess_role');
+		
+		// load view
+		$this->load->view('anggotaCetak', $data);
 	}
 	
 	function update($id)
