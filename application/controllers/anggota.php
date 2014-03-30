@@ -141,7 +141,7 @@ class Anggota extends CI_Controller {
 		// set common properties
 		// get person details
 		$data['person'] = $this->Anggota_model->get_by_id($id)->row();
-		$data['periode_to_text'] = $this->kur_functions->periode_to_text($periode);
+		if ($periode != '' ) $data['periode_to_text'] = $this->kur_functions->periode_to_text($periode);
 		// get keuangan details
 		$data['simpanan'] = $this->Keuangan_model->fetch_jumlah_simpanan_id($id)->row();
 		$data['murabahah'] = $this->Keuangan_model->fetch_rekap_murabahah_id($id)->result();

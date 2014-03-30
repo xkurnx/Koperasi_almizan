@@ -16,7 +16,7 @@
 <div class="wrapper">
 	<div class="content">
 		<div class="data">
-		<h4>Buku Transaksi Periode <?php echo $periode_to_text;?></h4>
+		<h4>Buku Transaksi Periode <?php if ( isset($periode_to_text) ) echo $periode_to_text;?></h4>
 		<table>
 			<tr>
 				<td width="20%">Nomor Anggota</td>
