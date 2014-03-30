@@ -24,7 +24,9 @@
 		<table>
 			<tr>
 				<td width="20%">Nomor Anggota</td>
-				<td><?php echo $person->id_anggota; ?></td>
+				<td><?php echo $person->id_anggota; ?>
+				<a class="cetak" href="javascript:cetakBuku('<?php echo $person->id_anggota; ?>','<?php echo $periode; ?>');">cetak</a>
+				</td>
 			</tr>
 			<tr>
 				<td valign="top">Nama Anggota</td>
@@ -101,6 +103,14 @@
 				endforeach;
 					?>
 				</table>
+				<ul>
+					<li>JS = Jasa</li>
+					<li>KP = Kompensasi</li>
+					<li>SK = Simpanan Sukarela</li>
+					<li>SW = Simpanan Wajib</li>
+					<li>BL = Belanja Pokok</li>
+					<li>RK = Rekening</li>
+				</ul>	
 				</td>
 			</tr>
 			

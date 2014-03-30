@@ -18,6 +18,7 @@
 	//print_r($this->form_data);
 	?>
 		<h1><?php echo $title; ?></h1>
+		<span class="hide periode_hidden"><?php echo $periode;?></span>
 		<a class="excel" href="javascript:;">download sebagai excel</a><br /><br />
 		<div class="data">
 		<?php echo $html_table;?>		

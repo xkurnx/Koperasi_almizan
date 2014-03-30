@@ -85,10 +85,10 @@ class Anggota extends CI_Controller {
 		$this->_view($id);	
 	}
 	
-	function view($id){
+	function view($id,$periode=''){
 		$this->kur_auth->is_logged_in();
 		$this->kur_auth->allowed(array(0));
-		$this->_view($id);	
+		$this->_view($id,$periode);	
 	}
 	
 	function cetak( $id,$periode='' ){
@@ -103,9 +103,9 @@ class Anggota extends CI_Controller {
 		- Rekap Simpanan
 		- Rekap Belanja & Rekening
 		- Rekap Murabahah
-		- 15 Transaksi Terakhir
+		- 15 Transaksi Terakhir, tp klo ada $periode, ambil dari periode berjalan
 		*/
-	private function _view($id)
+	private function _view($id,$periode)
 	{
 		// set common properties
 		$data['title'] = 'Informasi Anggota';
@@ -115,8 +115,10 @@ class Anggota extends CI_Controller {
 		
 		// get person details
 		$data['person'] = $this->Anggota_model->get_by_id($id)->row();
+		$data['periode'] = $periode;
 		
 		// get keuangan details
+		$this->Keuangan_model->set_periode($periode);
 		$data['simpanan'] = $this->Keuangan_model->fetch_jumlah_simpanan_id($id)->row();
 		$data['murabahah'] = $this->Keuangan_model->fetch_rekap_murabahah_id($id)->result();
 		$data['trans'] = $this->Keuangan_model->fetch_recent_trans_id($id)->result();
@@ -139,13 +141,14 @@ class Anggota extends CI_Controller {
 	private function _cetak($id,$periode)	
 	{
 		// set common properties
+		$this->Keuangan_model->set_periode($periode);
 		// get person details
 		$data['person'] = $this->Anggota_model->get_by_id($id)->row();
 		if ($periode != '' ) $data['periode_to_text'] = $this->kur_functions->periode_to_text($periode);
 		// get keuangan details
 		$data['simpanan'] = $this->Keuangan_model->fetch_jumlah_simpanan_id($id)->row();
 		$data['murabahah'] = $this->Keuangan_model->fetch_rekap_murabahah_id($id)->result();
-		$data['trans'] = $this->Keuangan_model->fetch_recent_trans_id($id,$periode)->result();
+		$data['trans'] = $this->Keuangan_model->fetch_recent_trans_id($id)->result();
 		$data['berek'] = $this->Keuangan_model->fetch_jumlah_berek_id($id)->row();
 		$data['role_user'] = $this->session->userdata('kop_sess_role');
 		

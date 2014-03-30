@@ -149,6 +149,14 @@ $j_pengeluaran += $result->pengeluaran;
 	}
 	if ( $saldo_akhir != $j_kas && $j_kas != $saldo_awal ) {
 	?>
+	<ul>
+	<li>Proses Tutup Buku akan menjadikan Saldo Akhir Periode ini sebagai Saldo Awal Periode Berikutnya</li>
+	<li>Jika ada transaksi setelah tutup buku, silahkan lakukan kembali tutup buku</li>
+	<li>Proses Tutup Buku Jasa-Jasa dan mendistribusikannya ke tiap anggota</li>
+	<li>Proses Tutup Buku akan menghitung Jasa-Jasa dan mendistribusikannya ke tiap anggota</li>
+	<li>Proses Tutup Buku akan menghasilkan file backup (ZIP), mohon simpan file tersebut di tempat yang aman</li>
+	<li>Proses Tutup Buku akan mengirim/mengupload data ke website koperasi almizan</li>
+	</ul>
 	<form method="post" action="<?php echo $action;?>">
 	<input type="hidden" name="jenis_trans" value="tutup_buku">
 	<input type="hidden" name="periode" value="<?php echo $periode;?>">
