@@ -9,6 +9,7 @@ table td{
 .wrapper{
 	width:auto;
 }
+div.content {width:auto}
 
 div.content h1{
 	border:0px;

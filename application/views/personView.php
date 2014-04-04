@@ -36,10 +36,11 @@
 				<td valign="top">Jenis Kelamin</td>
 				<td><?php echo strtoupper($person->jk)=='L'? 'Laki-Laki':'Perempuan' ; ?></td>
 			</tr>
-			<tr>
+			<!-- <tr>
 				<td valign="top">Tgl Lahir (dd-mm-yyyy)</td>
 				<td><?php echo date('d-m-Y',strtotime($person->tgl_lahir)); ?></td>
 			</tr>
+			-->
 			<tr>
 				<td valign="top">Simpanan</td>
 				<td>
@@ -105,7 +106,7 @@
 				</table>
 				<ul>
 					<li>JS = Jasa</li>
-					<li>KP = Kompensasi</li>
+					<li>KP = Kompensasi Angsuran, nilainya 30% dari laba</li>
 					<li>SK = Simpanan Sukarela</li>
 					<li>SW = Simpanan Wajib</li>
 					<li>BL = Belanja Pokok</li>

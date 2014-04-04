@@ -10,7 +10,10 @@ $(document).ready(function(){
 			nama = $(this).html().replace('dr','');
 			id_anggota=$(this).attr('rel');
 			periode = $('input[name=periode]').val();
-			URL = "Dari <a href='"+base_url+"index.php/anggota/view/"+id_anggota+"/"+periode+"'>"+nama+"</a>";
+			/* klo periode nya null, maka ambil dari periode_hidden */
+			if ( periode == null )
+			periode = $('.periode_hidden').html();
+			URL = "Dari <a target='_blank' href='"+base_url+"index.php/anggota/view/"+id_anggota+"/"+periode+"'>"+nama+"</a>";
 			if (id_anggota != '0' )
 			$(this).html(URL);
 		})
@@ -109,12 +112,27 @@ $(document).ready(function(){
 		})
 		
 		show_confirm=function(msg,url){
-					var r=confirm(msg);
-					if (r==true)
-					  {
-					  location.href= url ;
-					  }					
+			var r=confirm(msg);
+			if (r==true)
+			  {
+			  location.href= url ;
+			  }					
 		}
 		
+		cetakBuku = function(id_anggota,periode){
+			url = base_url+"index.php/anggota/cetak/"+id_anggota+"/"+periode;			
+			openpopupWindow(url);					
+		}
+		
+		/* open on new window */
+		openpopupWindow = function(url){
+			var title = "Buku Anggota";
+			var w = 800;
+			var h = 500;
+			var left = (screen.width/2)-(w/2);
+			var top = (screen.height/2)-(h/2);
+			return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+
+		}
 	
 })

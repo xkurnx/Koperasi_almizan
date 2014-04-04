@@ -133,6 +133,7 @@ class History extends CI_Controller {
 		$nilai = array('data' => number_format($jml,2,',','.'),'class' => 'bold alignRight');		
 		$this->table->add_row($cell, $nilai);	
 	
+		$data['title'] = "Riwayat Angsuran";
 		$data['link_back'] = '<a class="back" href="javascript:window.history.back()">Kembali</a>';
 		$data['table'] = $this->table->generate();
 		$data['name_login'] = $this->session->userdata('kop_sess_username');

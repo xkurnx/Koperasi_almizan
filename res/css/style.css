@@ -9,6 +9,12 @@ body.login{
 	background:none;
 }
 
+
+.hide{
+	display:none;
+}
+
+
 /* login box */
 
 .login .wrapper{
@@ -30,7 +36,17 @@ border-radius: 5px;
 .login .wrapper .loginBox input.text{
 	width:200px;	
 	height:24px;
-	font-size:16px;
+	font-size:14px;	
+}
+
+input.text{
+	border-radius: 3px;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+
+input.text:focus{
+	box-shadow:0 0 5px #BED6F8, 0 2px 2px #8F8F8F inset;
+	
 }
 
 .login .wrapper .loginBox #wp-submit{
@@ -204,6 +220,10 @@ a.delete {
 a.add {
 	background:url(images/add.png) left center no-repeat;
 }
+a.print {
+	background:url(images/print.png) left center no-repeat;
+}
+
 a.view {
 	background:url(images/view.png) left center no-repeat;
 }

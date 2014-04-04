@@ -82,7 +82,7 @@ class Anggota extends CI_Controller {
 	function home(){
 		// set common properties
 		$id = $this->session->userdata('kop_sess_userid');
-		$this->_view($id);	
+		$this->_view($id,'');	
 	}
 	
 	function view($id,$periode=''){
@@ -93,7 +93,7 @@ class Anggota extends CI_Controller {
 	
 	function cetak( $id,$periode='' ){
 		$this->kur_auth->is_logged_in();
-		$this->kur_auth->allowed(array(0));
+		#$this->kur_auth->allowed(array(0));
 		$this->_cetak($id,$periode);	
 	}
 	

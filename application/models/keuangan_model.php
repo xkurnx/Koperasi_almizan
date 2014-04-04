@@ -120,7 +120,6 @@ class Keuangan_model extends CI_Model {
 	function fetch_angsuran_id($id_mrbh){
 		$sql = "select * from d_angsuran				
 				where id_mrbh=$id_mrbh
-				$this->query_tgl_trans
 				order by tgl_trans asc";
 		$data = $this->db->query($sql);
 		return $data;	
@@ -161,6 +160,7 @@ class Keuangan_model extends CI_Model {
 	Tanggal pendistribusian JASA otomatis tanggal 28
 	*/
 	function _bagi_jasa_dan_kompensasi($periode,$text_periode){
+		
 		/* hapus dulu data JASA dan KOMPENSASI lama */
 		$sql_del = "delete from d_simpanan where DATE_FORMAT(tgl_trans, '%Y%m')='$periode' and kode_simpanan in ('JS','KP')";
 		echo $this->db->simple_query($sql_del);	
@@ -207,6 +207,10 @@ class Keuangan_model extends CI_Model {
 		$data = $this->db->query($sql);
 		#echo "<pre>$sql</pre>";
 		
+		/****
+		30% dari laba akan kembali kepada anggota tersebut 
+		Laba = Nilai yang diangsur-modal tiap angsuran
+		*/
 		$sql_kompensasi = "insert into d_simpanan(id_anggota,nilai,kode_simpanan,ket,tgl_trans,tgl_input,ip)
 							select id_anggota,sum(diangsur-((modal*diangsur/jual)))*0.3,'KP','Konpensasi $text_periode',str_to_date('$tgl_akhir 01:01:01','%Y%m%d %H:%i:%s'),now(),'server'
 												from m_murabahah  m, (
