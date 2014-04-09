@@ -212,8 +212,31 @@ class Trans extends CI_Controller {
 		
 	}
 	
+	/* untuk multiple FIELDs pengeluaran */
 	function multipleadd(){
-			
+		$nama_trans = $this->input->post('nama_trans');
+		$nilai_trans = $this->input->post('nilai_trans');
+		$tgl_trans = $this->input->post('tgl_trans');
+		
+		// loop
+		for ($i=0; $i<count($nama_trans); $i++ ){
+			echo $nama_trans[$i];
+			$data = array('tgl_trans' => date('Y-m-d', strtotime($tgl_trans[$i])),
+								'tgl_input' => date('Y-m-d'),								
+								'jenis' => "k",
+								'ket' => $nama_trans[$i],
+								'nilai' => $nilai_trans[$i],
+								'ip' => $_SERVER['REMOTE_ADDR']				
+							);
+			$table = 'd_kas';	
+			if ( $nilai_trans[$i] > 0 and $tgl_trans[$i]!='' ){
+				$this->Keuangan_model->save($table,$data);
+			}
+			 
+		}
+		//$id = $this->Keuangan_model->save($table,$data);
+		redirect($this->agent->referrer(), 'location');	
+				
 	}
 	
 	

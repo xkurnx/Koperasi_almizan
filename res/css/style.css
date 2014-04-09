@@ -386,14 +386,14 @@ ul.tabBulanan li a{
 	font-size:13px;
 }
 
-.KasKeluarForm input[name=nama_trans]{
+.KasKeluarForm input.nama_trans{
 	width:300px;
 }
-.KasKeluarForm input[name=nilai_trans]{
+.KasKeluarForm input.nilai_trans{
 	text-align:right;
 	width:100px;
 }
 
-.KasKeluarForm input[name=tgl_trans]{
+.KasKeluarForm input.tgl_trans{
 	width:80px;
 }

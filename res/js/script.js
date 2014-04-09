@@ -130,10 +130,10 @@ $(document).ready(function(){
 			openpopupWindow(url);					
 		}
 		
-		var item1 = $('.KasKeluarForm input[name=tgl_trans]')[0];
+		var item1 = $('.KasKeluarForm input.tgl_trans')[0];
 		//$(item1).remove();
 		$(item1).change(function(){
-		 $('.KasKeluarForm input[name=tgl_trans]').val($(this).val());
+		 $('.KasKeluarForm input.tgl_trans').val($(this).val());
 		});
 				
 		//$('input[name=tgl_trans]').remove();

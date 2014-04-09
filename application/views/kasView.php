@@ -23,13 +23,16 @@
 		 </ul>
 		 </div>
 		 <!-- multipl form untuk kas keluar -->
-		 <form class="KasKeluarForm" action="<?php echo site_url('trans/multipleadd');?>">
+		 <form method="post" class="KasKeluarForm" action="<?php echo site_url('trans/multipleadd');?>">
 		 <table>
 		 <tr><td width="300">Transaksi Keluar</td><td>Nilai (Rp.)</td><td>Tgl. Trans</td><td></td></tr>
 		 <?php
 		 foreach ($recent_kas_keluar as $kas):
 		 ?>		 
-		 <tr><td><input type="text" name="nama_trans" value="<?php echo $kas->ket;?>"></td><td><input type="text" name="nilai_trans" value=""></td><td><input type="text" name="tgl_trans" value=""></td><td><a class="btnDelRow" href="javascript:;">del</a></td></tr>
+		 <tr><td><input type="text" class="nama_trans" name="nama_trans[]" value="<?php echo $kas->ket;?>"></td>
+		 <td><input type="text" class="nilai_trans" name="nilai_trans[]" value=""></td>
+		 <td><input type="text" class="tgl_trans" name="tgl_trans[]" value=""></td>
+		 <td><a class="btnDelRow" href="javascript:;">del</a></td></tr>
 		 <?php
 		 endforeach;
 		 ?>
