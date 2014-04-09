@@ -48,6 +48,9 @@ class Kas extends CI_Controller {
 		$this->table->set_heading('No','Jenis','Ket', 'Tgl Transaksi', 'Nilai','Action');
 		$i = $jml = 0 ;
 		$rows = $this->Keuangan_model->fetch_kas( strtoupper($type), $periode )->result();	
+		
+		$recent_kas_keluar = $this->Keuangan_model->fetch_recent_kas_keluar()->result();	
+		
 		foreach ($rows as $row)
 				{
 					$jml += $row->nilai;
@@ -65,6 +68,9 @@ class Kas extends CI_Controller {
 		
 		$data['table'] = $this->table->generate();
 		$data['name_login'] = $this->session->userdata('kop_sess_username');
+		
+		$data['recent_kas_keluar'] = $recent_kas_keluar; 
+		
 		
 	// modal window untuk add Kas
 		$datamodal['periode'] = $periode; 

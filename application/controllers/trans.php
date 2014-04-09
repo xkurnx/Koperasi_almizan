@@ -212,6 +212,10 @@ class Trans extends CI_Controller {
 		
 	}
 	
+	function multipleadd(){
+			
+	}
+	
 	
 }
 ?>

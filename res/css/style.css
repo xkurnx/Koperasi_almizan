@@ -376,3 +376,24 @@ ul.tabBulanan li.active{
 ul.tabBulanan li a{
 	color:#fff;	
 }
+
+.KasKeluarForm{
+	font-size:14px;
+	margin-bottom:10px;
+}
+
+.KasKeluarForm input{
+	font-size:13px;
+}
+
+.KasKeluarForm input[name=nama_trans]{
+	width:300px;
+}
+.KasKeluarForm input[name=nilai_trans]{
+	text-align:right;
+	width:100px;
+}
+
+.KasKeluarForm input[name=tgl_trans]{
+	width:80px;
+}

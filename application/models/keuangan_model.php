@@ -156,6 +156,13 @@ class Keuangan_model extends CI_Model {
 		return $data;	
 	}
 	
+	
+	function fetch_recent_kas_keluar(){
+		$sql = "select distinct ket from d_kas where jenis='K' ";
+		$data = $this->db->query($sql);
+		return $data;	
+	}
+	
 	/****
 	Tanggal pendistribusian JASA otomatis tanggal 28
 	*/
@@ -234,15 +241,16 @@ class Keuangan_model extends CI_Model {
 		dibuat saat periode Desember tiap tahunnya
 		Rumus :
 		SHU = JASA MODAL + JASA USAHA
-		JASA MODAL = (JML SIMPANAN / Total Simpanan ) * 	
-
-
+		JASA MODAL = (JML SIMPANAN / Total Simpanan ) * 
 	
 	*/
 	function distribusi_shu($periode){
 		
 		$data = $this->db->query($sql_kompensasi);	 
 	}
+	
+	
+	
 	
 	function save($table,$data){
 		#print_r($data);

@@ -119,10 +119,25 @@ $(document).ready(function(){
 			  }					
 		}
 		
+		/* del Row on Multiple Kas Keluar */
+		
+		$('a.btnDelRow').click(function(){
+			$(this).parent().parent().remove();
+		})
+		
 		cetakBuku = function(id_anggota,periode){
 			url = base_url+"index.php/anggota/cetak/"+id_anggota+"/"+periode;			
 			openpopupWindow(url);					
 		}
+		
+		var item1 = $('.KasKeluarForm input[name=tgl_trans]')[0];
+		//$(item1).remove();
+		$(item1).change(function(){
+		 $('.KasKeluarForm input[name=tgl_trans]').val($(this).val());
+		});
+				
+		//$('input[name=tgl_trans]').remove();
+		
 		
 		/* open on new window */
 		openpopupWindow = function(url){
@@ -133,6 +148,11 @@ $(document).ready(function(){
 			var top = (screen.height/2)-(h/2);
 			return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
 
+		}
+		
+		showKasKeluarForm = function (){
+					
+		
 		}
 	
 })
