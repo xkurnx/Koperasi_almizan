@@ -71,7 +71,7 @@ border-radius: 5px;
 
 .wrapper{
 		margin:0px auto;
-		width:1000px;
+		width:1060px;
 }
 
 .header{
@@ -136,7 +136,7 @@ div.infoValidasi{
 	font-size:12px;
 }
 div.content {
-	width:960px;
+	width:1000px;
 	background:#fff;
 	padding:10px 30px;
 }
@@ -151,7 +151,7 @@ div.content h1 {
 div.content div.data table {
 	border:2px solid #000;
 	background:#fff;
-	width:960px;
+	width:1000px;
 }
 
 

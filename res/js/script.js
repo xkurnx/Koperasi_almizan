@@ -80,6 +80,20 @@ $(document).ready(function(){
 				});
 		}
 		
+		add_qhasan = function (kode_berek){
+			//$('.text').val('');
+			$('#modalAddQHasan input[name=ket]').focus();
+			$('.overlay').css('display','block');
+			$('.overlay').height($(document).height());
+				var h = $(window).height();
+				var w = $(window).width();
+				$('#modalAddQHasan').css({
+					display:"block",
+					left: (w - $('.modalBox').width()) / 2,
+					top: (h - $('.modalBox').height()) / 2
+				});
+		}
+		
 		add_kas=function(){		
 			$('.text').val('');
 				$('#modalAddkas input[name=ket]').focus();

@@ -143,6 +143,24 @@ class Keuangan_model extends CI_Model {
 		return $data;		
 	}	
 	
+	function fetch_rekap_qhasan_id($id){
+		 $query_tgl_trans = ($this->periode == '' ) ? "":"and date_format(tgl_trans,'%Y%m')<='$this->periode'";	
+		
+		 $sql = "select m.id_qhasan,tahun,ket,jual,jgk,init_angsuran_ke+angsuran_ke angsuran_ke,urut_qhasan,diangsur from m_qhasan  m 
+				left outer join (
+				select id_mrbh,sum(nilai) diangsur,sum(case when ket not like '%migrasi%'then 1 else 0 end ) angsuran_ke 
+								from d_angsuran
+								where 1=1
+								$query_tgl_trans
+								and kategori = 'QHASAN'
+						group by id_mrbh
+				) as a on a.id_mrbh=m.id_qhasan
+				where m.id_anggota=$id";
+		#echo "<pre>$sql</pre>";
+		$data = $this->db->query($sql);
+		return $data;		
+	}
+	
 	function fetch_kas($jenis,$periode=''){
 				
 		$sql_jenis =  ( $jenis != 'ALL' )? " and jenis='$jenis'" :"";

@@ -75,7 +75,7 @@ foreach ($trans as $result)
 {
 $i++;
 $kas_masuk = $result->SW + $result->SK + $result->pokok_pinj + $result->laba_pinj
-		+ $result->pokok_rk + $result->pokok_bl + $result->jasa_rk + $result->jasa_bl + $result->denda;
+		+ $result->pokok_rk + $result->pokok_bl + $result->jasa_rk + $result->jasa_bl + $result->denda + $result->pemasukan ;
 $j_kas = $j_kas + $kas_masuk - $result->pengeluaran;
 ?>
 <tr>

@@ -65,12 +65,13 @@ class Laporan_model extends CI_Model {
 				IFNULL(pokok_rk,0) pokok_rk,
 				IFNULL(jasa_rk,0) jasa_rk,
 				IFNULL(denda,0) denda,
+				IFNULL(pemasukan,0) pemasukan,			
 				IFNULL(pengeluaran,0) pengeluaran	
 				from
 				 (	select 'KM' jenis,STR_TO_DATE('$tgl_satu', '%m-%d-%Y') tgl,
 				    concat('dr ',nama) nama,SW,SK,m_anggota.id_anggota,pokok_pinj,laba_pinj,
 				   pokok_bl,pokok_rk,jasa_bl,jasa_rk,
-					denda,0 pengeluaran
+					denda,0 pemasukan,0 pengeluaran
 					from m_anggota 
 					left outer join
 					(
@@ -119,30 +120,41 @@ class Laporan_model extends CI_Model {
 					on m_anggota.id_anggota = r_berek.id_anggota					
 				union
 				/* KK : murabahah */
-				select 'KK',tgl_pencairan,concat('Murabahah - ',ket) ket,m_anggota.id_anggota,0 SW,0 SP,
+				select 'KK',tgl_pencairan,concat('Murabahah - ',ket) ket, null id_anggota,0 SW,0 SP,
 				0 pokok_pinj, 0 laba_pinj,
 				0 pokok_bl,0 pokok_rk,				
 				0 jasa_bl,0 jasa_rk,
-				0 denda,m_murabahah.jual 
+				0 denda,0,m_murabahah.modal 
 				from m_murabahah, m_anggota
 				where m_anggota.id_anggota = m_murabahah.id_anggota
 				and DATE_FORMAT(tgl_pencairan, '%Y%m')='$periode'
 				union
 				/* KK : Pengeluaran */
-				select concat('K',jenis),tgl_trans,ket,null id_anggota,
+				select 'KK',tgl_trans,ket,null id_anggota,
 				0 SW,0 SP,0 pokok_pinj,
 				0 laba_pinj,
 				0 pokok_bl,0 pokok_rk,				
-				0 jasa_bl,0 jasa_rk,0 denda,nilai
+				0 jasa_bl,0 jasa_rk,0 denda,0, nilai
 				from d_kas
 				where DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
+				and jenis='K'
+				union
+				/* KM : Kas Masuk Qordun Hasan */
+				select 'KM',tgl_trans,ket,null id_anggota,
+				0 SW,0 SP,0 pokok_pinj,
+				0 laba_pinj,
+				0 pokok_bl,0 pokok_rk,				
+				0 jasa_bl,0 jasa_rk,0 denda,nilai,0
+				from d_kas
+				where DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
+				and jenis='M'
 				) harian	
 				union
 				/* tarik simpanan */
 				select 'KK' jenis,DATE_FORMAT(tgl_trans, '%m-%d-%Y') tgl,
 				concat('Tarik Simpanan ',nama) nama,0 SW,0 SK,0 id_anggota,0 pokok_pinj,0 laba_pinj,
 				0 pokok_bl,0 pokok_rk,0 jasa_bl,0 jasa_rk,
-				0 denda,abs(nilai) pengeluaran
+				0 denda,0,abs(nilai) pengeluaran
 				from m_anggota,d_simpanan
 				where m_anggota.id_anggota=d_simpanan.id_anggota
 				and upper(ket) <> 'DATA AWAL MIGRASI'
