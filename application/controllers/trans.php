@@ -113,6 +113,7 @@ class Trans extends CI_Controller {
 								'denda' => $this->input->post('denda'),
 								'tgl_trans' => date('Y-m-d', strtotime($this->input->post('tgl_trans_angsuran'))),
 								'tgl_input' => date('Y-m-d'),
+								'kategori' => $this->input->post('kategori'),
 								'operator' => $this->operator_id,
 								'ip' => $_SERVER['REMOTE_ADDR'],
 								'ket' => 'Angsuran ke '.($angsuran_ke->angsuran_ke	+ 1 )						
@@ -164,10 +165,23 @@ class Trans extends CI_Controller {
 				$id = $this->Keuangan_model->save($table,$data);
 				redirect($this->agent->referrer(), 'location');		
 				break;	
-				case 'create_murabahah':
-				// insert Murabahah 
-				$jgk = $this->input->post('jgk');
+			
+			// insert Murabahah 
+			/*********************************************
+			nanti akan dibuat juga biaya Administrasi sebagai Kas Masuk 
+			1 - 1jt 10.000	
+			*********************************************/	
+			case 'create_murabahah':
+			$jgk = $this->input->post('jgk');
 				$margin = 15;
+				if ( $jgk > 12 && $jgk <= 24 ){
+					$margin = 20;
+				}
+				
+				if ( $jgk > 24 && $jgk <= 36 ){
+					$margin = 25;
+				}
+				
 				$urut_mrbh = $this->_get_no_urut_murabahah()->row();
 				$jual = $nilai * ( ( 100 + $margin ) / 100 );
 				$angsuran = $jual / $jgk ;
@@ -187,6 +201,51 @@ class Trans extends CI_Controller {
 				redirect($this->agent->referrer(), 'location');		
 				break;	
 				
+				
+			/*********************************************
+			Create QORDUN HASAN
+			7.5 * nilai = KAS MASUK
+			*********************************************/	
+			case 'create_qhasan':
+				$jgk = $this->input->post('jgk');
+				$margin = 0;				
+				$urut_mrbh = $this->_get_no_urut_murabahah()->row();
+				$jual = $nilai;
+				$angsuran = $jual / $jgk ;
+				$data = array('tgl_pencairan' => date('Y-m-d', strtotime($this->input->post('tgl_trans_qhasan'))),								
+								'jgk' => $jgk,
+								'id_anggota' => $this->input->post('id_anggota'), 
+								'ket' => $this->input->post('ket'),
+								'modal' => $nilai,
+								'jual' => $jual,
+								'angsuran' => $angsuran,
+								'tahun' => date('Y'),
+								'urut_qhasan'=> $urut_mrbh->urut_mrbh,
+								'ip' => $_SERVER['REMOTE_ADDR']				
+							);
+				$table = 'm_qhasan';
+				$id = $this->Keuangan_model->save($table,$data);				
+				/***************************************
+				Tambahkan 7.5% dari nilai sebagai INFAQ, RIBA KAH????????? 
+				****************************************/		
+				$data = array('tgl_trans' => date('Y-m-d', strtotime($this->input->post('tgl_trans_qhasan'))),
+								'tgl_input' => date('Y-m-d'),								
+								'jenis' => 'm', /// kas masuk
+								'ket' => 'Jasa Qordun Hasan '.$this->input->post('ket'),
+								'nilai' => $nilai*7.5/100,
+								'ip' => $_SERVER['REMOTE_ADDR']				
+							);
+				$table = 'd_kas';	
+				$id = $this->Keuangan_model->save($table,$data);				
+				
+				redirect($this->agent->referrer(), 'location');		
+				break;	
+			
+			
+			
+			/*********************************************
+			PROSES TUTUP BUKU
+			*********************************************/	
 				case 'tutup_buku':
 				// hapus data saldo awal sebelumnya
 				$data = array('periode' => $this->input->post('periode'),

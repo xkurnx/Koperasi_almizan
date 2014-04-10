@@ -121,6 +121,8 @@ class Anggota extends CI_Controller {
 		$this->Keuangan_model->set_periode($periode);
 		$data['simpanan'] = $this->Keuangan_model->fetch_jumlah_simpanan_id($id)->row();
 		$data['murabahah'] = $this->Keuangan_model->fetch_rekap_murabahah_id($id)->result();
+		$data['qordunhasan'] = $this->Keuangan_model->fetch_rekap_qhasan_id($id)->result();		
+		
 		$data['trans'] = $this->Keuangan_model->fetch_recent_trans_id($id)->result();
 		$data['berek'] = $this->Keuangan_model->fetch_jumlah_berek_id($id)->row();
 		$data['role_user'] = $this->session->userdata('kop_sess_role');

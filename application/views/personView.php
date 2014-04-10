@@ -90,6 +90,28 @@
 				</td>
 			</tr>
 			
+			<!-- ------------------------- qordun hasan ----------------------------->
+			<tr>
+				<td valign="top">Qordun Hasan <br /><a href="javascript:;" onclick="add_qhasan()" class="add">Buat Qordun Hasan Baru</a></td>
+				<td>
+				<table class='small w400'>
+				<tr class='head'><td class='w300'>Qordun Hasan</td><td>Jangka</td><td>Agsrn Ke</td><td colspan='2'>Harga Jual</td><td colspan='2'>Angsuran/ Bln</td><td colspan='2'>Sudah dibayar</td></tr>
+				 
+				
+				<?php
+				foreach ($qordunhasan as $data ):
+					$html = ( $data->diangsur >= $data->jual )?" <span class='lunas'>- lunas</span>":"<a href=\"javascript:add_angsuran($data->id_qhasan,'".($data->jual/$data->jgk)."')\" class='add'>tbh trans</a>";
+					echo "<tr><td>$data->ket <br/ >$html </td>";
+					echo "<td>$data->jgk</td><td>$data->angsuran_ke</td>";
+					echo "<td class='w20'>Rp.</td><td class='uang'>".number_format($data->jual,2,',','.')."</td>";
+					echo "<td class='w20'>Rp.</td><td class='uang'>".number_format($data->jual/$data->jgk,2,',','.')."</td>";
+					echo "<td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/angsuran/'.$data->id_qhasan)."'>".number_format($data->diangsur,2,',','.')."</a></td></tr>";
+				endforeach;
+					?>
+				</table>
+				</td>
+			</tr>
+			
 			<tr>
 				<td valign="top">15 Transaksi Terakhir</td>
 				<td>
@@ -213,6 +235,33 @@
 			<br />Tgl Pencairan Dana <br />
 			<input type="text" value="" class="text tgl_trans" name="tgl_trans_murabahah"><a onclick="displayDatePicker('tgl_trans_murabahah');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
 			<input type="hidden" name="jenis_trans" value="create_murabahah">
+			<input type="hidden" name="kode_berek" value="">
+			<input type="hidden" name="id_anggota" value="<?php echo $person->id_anggota;?>">
+			<br />Catatan<br />
+			<textarea name="catatan" cols=20 rows=3></textarea>
+			<br />
+			<input type="button" class="btnSubmit" value="OK">
+			<input type="button" class="btnBatal cancel" value="Batal">
+		</form>
+		</div>		
+	</div>
+	
+	
+	<!-- Buat Qordun Hasan -->
+	<div id="modalAddQHasan" class="modalBox">
+		<div class="modalTitle">Buat Qordun Hasan Baru</div>
+		<div class="modalBody" >
+		<form id="formAddTrans" autocomplete="off" method="post" action="<?php if ( isset($action) ) echo $action;?>">
+			Nama Qordun Hasan <br />
+			<input type="text" class="text" name="ket" value="<?php echo $person->nama; ?>">
+			<br />Nilai (Rp.) <br />
+			<input type="text" class="text" name="nilai" value="">
+			<br />Jangka Waktu (max. 12 Bulan) <br />
+			<input type="text" class="text" name="jgk" value="12">
+			</select>
+			<br />Tgl Pencairan Dana <br />
+			<input type="text" value="" class="text tgl_trans" name="tgl_trans_qhasan"><a onclick="displayDatePicker('tgl_trans_murabahah');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
+			<input type="hidden" name="jenis_trans" value="create_qhasan">
 			<input type="hidden" name="kode_berek" value="">
 			<input type="hidden" name="id_anggota" value="<?php echo $person->id_anggota;?>">
 			<br />Catatan<br />
