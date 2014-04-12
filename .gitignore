@@ -6,8 +6,11 @@
 *.bak
 *.swp
 Thumbs.db
+
 application/.htaccess
-application/config/database.php*/config/development
+application/config/*
+application/libraries/*
+*/config/development
 */logs/log-*.php
 */logs/!index.html
 */cache/*
