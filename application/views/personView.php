@@ -13,7 +13,10 @@
 <?php if ( $role_user != 0 ) echo "a.add,a.delete{display:none}";?>
 </style>
 
-
+<?php
+// tgl transaksi default setiap tgl 5
+$tgl_default = "05-04-2013";
+?>
 </head>
 <body>
 <div class="wrapper">
@@ -113,7 +116,7 @@
 			</tr>
 			
 			<tr>
-				<td valign="top">15 Transaksi Terakhir</td>
+				<td valign="top">Transaksi Terakhir</td>
 				<td>
 				<table class='noBorder w400'>
 				<tr class='head'><td>Tgl Transaksi</td><td>Jenis</td><td colspan="2">Rupiah</td><td>Keterangan</td><td></td></tr>
@@ -156,7 +159,7 @@
 			<br />Denda (Rp.) <br />
 			<input type="text" class="text" name="denda" value="">
 			<br />Tgl Transaksi <br />
-			<input type="text" value="" class="text tgl_trans" name="tgl_trans_angsuran"><a onclick="displayDatePicker('tgl_trans_angsuran');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
+			<input type="text" value="<?php echo $tgl_default ;?>" class="text tgl_trans" name="tgl_trans_angsuran"><a onclick="displayDatePicker('tgl_trans_angsuran');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
 			<input type="hidden" name="jenis_trans" value="angsuran">
 			<input type="hidden" name="id_mrbh" value="">
 			<input type="hidden" name="id_anggota" value="<?php echo $person->id_anggota;?>">
@@ -186,7 +189,7 @@
 			<br />Nilai (Rp.) <br />
 			<input type="text" class="text" name="nilai" value="">
 			<br />Tgl Transaksi <br />
-			<input type="text" value="" class="text tgl_trans" name="tgl_trans_simpanan"><a onclick="displayDatePicker('tgl_trans_simpanan');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
+			<input type="text" value="<?php echo $tgl_default ;?>" class="text tgl_trans" name="tgl_trans_simpanan"><a onclick="displayDatePicker('tgl_trans_simpanan');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
 			<input type="hidden" name="jenis_trans" value="simpanan">
 			<input type="hidden" name="kode_simpanan" value="">
 			<input type="hidden" name="id_anggota" value="<?php echo $person->id_anggota;?>">
@@ -209,7 +212,7 @@
 			<br />Jasa/Laba (Rp.) <br />
 			<input type="text" class="text" name="nilai" value="">
 			<br />Tgl Transaksi <br />
-			<input type="text" value="" class="text tgl_trans" name="tgl_trans_berek"><a onclick="displayDatePicker('tgl_trans_berek');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
+			<input type="text" value="<?php echo $tgl_default ;?>" class="text tgl_trans" name="tgl_trans_berek"><a onclick="displayDatePicker('tgl_trans_berek');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
 			<input type="hidden" name="jenis_trans" value="berek">
 			<input type="hidden" name="kode_berek" value="">
 			<input type="hidden" name="id_anggota" value="<?php echo $person->id_anggota;?>">
@@ -226,9 +229,11 @@
 		<div class="modalBody" >
 		<form id="formAddTrans" autocomplete="off" method="post" action="<?php if ( isset($action) ) echo $action;?>">
 			Nama Murabahah <br />
-			<input type="text" class="text" name="ket" value="">
+			<input type="text" class="text" name="ket" value="<?php echo $person->nama; ?>">
 			<br />Nilai (Rp.) <br />
 			<input type="text" class="text" name="nilai" value="">
+			<br />Adm (Rp.) <br />
+			<input type="text" class="text" name="biaya_adm" value="">
 			<br />Jangka Waktu (max. 60 Bulan)<br />
 			<input type="text" class="text" name="jgk" value="">
 			</select>
@@ -256,6 +261,8 @@
 			<input type="text" class="text" name="ket" value="<?php echo $person->nama; ?>">
 			<br />Nilai (Rp.) <br />
 			<input type="text" class="text" name="nilai" value="">
+			<br />Adm (Rp.) <br />
+			<input type="text" class="text" name="biaya_adm" value="">
 			<br />Jangka Waktu (max. 12 Bulan) <br />
 			<input type="text" class="text" name="jgk" value="12">
 			</select>

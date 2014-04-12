@@ -169,7 +169,7 @@ class Anggota extends CI_Controller {
 		// prefill form values
 		$person = $this->Anggota_model->get_by_id($id)->row();
 		$this->form_data->id_anggota = $id;
-		$this->form_data->user_name = $person->user_name;
+		$this->form_data->tmt_aktif = $person->tmt_aktif;
 		$this->form_data->nama = $person->nama;
 		$this->form_data->jk = strtoupper($person->jk);
 		$this->form_data->tgl_lahir = date('d-m-Y',strtotime($person->tgl_lahir));
@@ -177,18 +177,18 @@ class Anggota extends CI_Controller {
 		// set common properties
 		$data['title'] = 'Update person';
 		$data['message'] = '';
-		$data['action'] = site_url('anggota/updatePerson');
-		$data['link_back'] = anchor('anggota/index/','Back to list of persons',array('class'=>'back'));
+		$data['action'] = site_url('anggota/updateAnggota');
+		$data['link_back'] = anchor('anggota/index/','Kembali ke Daftar Anggota',array('class'=>'back'));
 	
 		// load view
 		$this->load->view('personEdit', $data);
 	}
 	
-	function updatePerson()
+	function updateAnggota()
 	{
 		// set common properties
 		$data['title'] = 'Update person';
-		$data['action'] = site_url('anggota/updatePerson');
+		$data['action'] = site_url('anggota/updateAnggota');
 		$data['link_back'] = anchor('anggota/index/','Back to list of persons',array('class'=>'back'));
 		
 		// set empty default form field values
@@ -205,15 +205,15 @@ class Anggota extends CI_Controller {
 		{
 			// save data
 			$id = $this->input->post('id');
-			$person = array('user_name' => $this->input->post('user_name'),
-							'nama' => $this->input->post('nama'),
+			$person = array('nama' => $this->input->post('nama'),
 							'jk' => $this->input->post('jk'),
-							'tgl_lahir' => date('Y-m-d', strtotime($this->input->post('tgl_lahir'))));
+							'pass' => md5($this->input->post('pass')),
+							'tmt_aktif' => date('Y-m-d', strtotime($this->input->post('tmt_aktif'))));
 		
 			$this->Anggota_model->update($id,$person);
 			
 			// set user message
-			$data['message'] = '<div class="success">update person success</div>';
+			$data['message'] = '<div class="success">Data Anggota Berhasil diUbah</div>';
 		}
 		
 		// load view
@@ -223,6 +223,44 @@ class Anggota extends CI_Controller {
 		$log = "Data Dirubah : ".$this->input->post('user_name')."#".$this->input->post('nama')."#".$this->input->post('tgl_lahir');		
 		$this->kur_log->write($id,$log);
 	}
+	
+	
+	function addPerson()
+	{
+		// set empty default form field values
+		$this->_set_fields();
+		// set validation properties
+		$this->_set_rules();
+		
+		// run validation
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data['message'] = '';
+		}
+		else
+		{
+			// save data
+			$person = array('nama' => $this->input->post('nama'),
+							'jk' => $this->input->post('jk'),
+							'role' => 2,
+							'pass' => md5($this->input->post('pass')),
+							'is_active' => 1,
+							'tmt_aktif' => date('Y-m-d', strtotime($this->input->post('tmt_aktif'))));
+		
+			$id = $this->Anggota_model->save($person);
+			// set user message
+			$data['message'] = '<div class="success">Anggota  baru berhasil ditambah</div>';
+		}
+		
+		// load view
+		$this->load->view('personEdit', $data);
+		
+		/* Logging */
+		$log = "Data tambah : ".$this->input->post('user_name')."#".$this->input->post('nama')."#".$this->input->post('tgl_lahir');		
+		$this->kur_log->write($id,$log);
+	}
+	
+	
 	
 	function disable($id)
 	{
@@ -257,19 +295,19 @@ class Anggota extends CI_Controller {
 	function _set_fields()
 	{
 		$this->form_data->id_anggota = '';
-		$this->form_data->user_name = '';
 		$this->form_data->nama = '';
 		$this->form_data->jk = '';
-		$this->form_data->tgl_lahir = '';
+		//$this->form_data->tgl_lahir = '';
+		$this->form_data->tmt_aktif = '';
 	}
 	
 	// validation rules
 	function _set_rules()
 	{
-		$this->form_validation->set_rules('user_name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('nama', 'Name', 'trim|required');
 		$this->form_validation->set_rules('jk', 'Gender', 'trim|required');
-		$this->form_validation->set_rules('tgl_lahir', 'DoB', 'trim|required|callback_valid_date');
-		
+		//$this->form_validation->set_rules('tgl_lahir', 'DoB', 'trim|required|callback_valid_date');
+		$this->form_validation->set_rules('tmt_aktif', 'DoB', 'trim|required|callback_valid_date');
 		$this->form_validation->set_message('required', '* required');
 		$this->form_validation->set_message('isset', '* required');
 		$this->form_validation->set_message('valid_date', 'date format is not valid. dd-mm-yyyy');

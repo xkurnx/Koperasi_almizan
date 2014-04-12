@@ -48,7 +48,8 @@ class Keuangan_model extends CI_Model {
 							where id_anggota=$id 
 							$query_tgl_trans
 					) as h      
-								 order by tgl_trans desc
+							order by tgl_trans desc
+							limit 15
 				
 		";
 			#echo "<pre>$sql</pre>" ;
@@ -176,7 +177,8 @@ class Keuangan_model extends CI_Model {
 	
 	
 	function fetch_recent_kas_keluar(){
-		$sql = "select distinct ket from d_kas where jenis='K' ";
+		$sql = "select distinct ket from d_kas where jenis='K' 
+				AND MONTH(tgl_trans) = MONTH(CURRENT_DATE - INTERVAL 2 MONTH)";
 		$data = $this->db->query($sql);
 		return $data;	
 	}

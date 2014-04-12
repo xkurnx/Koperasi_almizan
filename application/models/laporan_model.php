@@ -129,6 +129,16 @@ class Laporan_model extends CI_Model {
 				where m_anggota.id_anggota = m_murabahah.id_anggota
 				and DATE_FORMAT(tgl_pencairan, '%Y%m')='$periode'
 				union
+				/* KK : Qordun Hasan */
+				select 'KK',tgl_pencairan,concat('Qordun Hasan - ',ket) ket, null id_anggota,0 SW,0 SP,
+				0 pokok_pinj, 0 laba_pinj,
+				0 pokok_bl,0 pokok_rk,				
+				0 jasa_bl,0 jasa_rk,
+				0 denda,0,m_qhasan.modal 
+				from m_qhasan, m_anggota
+				where m_anggota.id_anggota = m_qhasan.id_anggota
+				and DATE_FORMAT(tgl_pencairan, '%Y%m')='$periode'
+				union
 				/* KK : Pengeluaran */
 				select 'KK',tgl_trans,ket,null id_anggota,
 				0 SW,0 SP,0 pokok_pinj,
@@ -139,7 +149,7 @@ class Laporan_model extends CI_Model {
 				where DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
 				and jenis='K'
 				union
-				/* KM : Kas Masuk Qordun Hasan */
+				/* Kas Masuk : Jasa Qordun Hasan, Adm */
 				select 'KM',tgl_trans,ket,null id_anggota,
 				0 SW,0 SP,0 pokok_pinj,
 				0 laba_pinj,

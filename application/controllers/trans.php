@@ -153,7 +153,7 @@ class Trans extends CI_Controller {
 				redirect('anggota/view/'.$this->input->post('id_anggota'), 'location');	
 				break;	
 			case 'kas':
-				// insert berek 
+				// insert kas 
 				$data = array('tgl_trans' => date('Y-m-d', strtotime($this->input->post('tgl_trans'))),
 								'tgl_input' => date('Y-m-d'),								
 								'jenis' => $this->input->post('type'),
@@ -198,8 +198,21 @@ class Trans extends CI_Controller {
 							);
 				$table = 'm_murabahah';
 				$id = $this->Keuangan_model->save($table,$data);
+				
+				/**********************************************
+				add biaya administrasi
+				***********************************************/	
+				$data = array('tgl_trans' => date('Y-m-d', strtotime($this->input->post('tgl_trans_murabahah'))),
+								'tgl_input' => date('Y-m-d'),								
+								'jenis' => 'm',
+								'ket' => 'Adm Murabahah '.$this->input->post('ket'),
+								'nilai' => $this->input->post('biaya_adm'),
+								'ip' => $_SERVER['REMOTE_ADDR']				
+							);
+				$table = 'd_kas';	
+				$id = $this->Keuangan_model->save($table,$data);					
 				redirect($this->agent->referrer(), 'location');		
-				break;	
+				exit;
 				
 				
 			/*********************************************
@@ -226,7 +239,7 @@ class Trans extends CI_Controller {
 				$table = 'm_qhasan';
 				$id = $this->Keuangan_model->save($table,$data);				
 				/***************************************
-				Tambahkan 7.5% dari nilai sebagai INFAQ, RIBA KAH????????? 
+				JASA Tambahkan 7.5% dari nilai sebagai INFAQ, RIBA KAH????????? 
 				****************************************/		
 				$data = array('tgl_trans' => date('Y-m-d', strtotime($this->input->post('tgl_trans_qhasan'))),
 								'tgl_input' => date('Y-m-d'),								
@@ -236,9 +249,22 @@ class Trans extends CI_Controller {
 								'ip' => $_SERVER['REMOTE_ADDR']				
 							);
 				$table = 'd_kas';	
-				$id = $this->Keuangan_model->save($table,$data);				
+				$id = $this->Keuangan_model->save($table,$data);	
+						
+				/**********************************************
+				add kas Keluar sbg kompensasi ke nasabah
+				***********************************************/	
+				$data = array('tgl_trans' => date('Y-m-d', strtotime($this->input->post('tgl_trans_qhasan'))),
+								'tgl_input' => date('Y-m-d'),								
+								'jenis' => 'k',
+								'ket' => 'komp Qordun Hasan '.$this->input->post('ket'),
+								'nilai' => $nilai*7.5/(2*100),
+								'ip' => $_SERVER['REMOTE_ADDR']				
+							);
+				$table = 'd_kas';	
+				$id = $this->Keuangan_model->save($table,$data);
 				
-				redirect($this->agent->referrer(), 'location');		
+				#redirect($this->agent->referrer(), 'location');		
 				break;	
 			
 			
@@ -293,7 +319,7 @@ class Trans extends CI_Controller {
 			}
 			 
 		}
-		//$id = $this->Keuangan_model->save($table,$data);
+		$id = $this->Keuangan_model->save($table,$data);
 		redirect($this->agent->referrer(), 'location');	
 				
 	}
