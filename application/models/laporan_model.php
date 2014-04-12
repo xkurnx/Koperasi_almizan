@@ -117,7 +117,8 @@ class Laporan_model extends CI_Model {
 					and DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
 					group by id_anggota
 					) r_berek
-					on m_anggota.id_anggota = r_berek.id_anggota					
+					on m_anggota.id_anggota = r_berek.id_anggota	
+				where tmt_aktif <= STR_TO_DATE('$periode"."28"."', '%Y%m%d')	/* munculkan hanya tmt <= periode berjalan */				
 				union
 				/* KK : murabahah */
 				select 'KK',tgl_pencairan,concat('Murabahah - ',ket) ket, null id_anggota,0 SW,0 SP,

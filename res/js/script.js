@@ -19,7 +19,7 @@ $(document).ready(function(){
 		})
 		
 		add_simpanan=function (kode_simpanan,nilai_default){
-			$('.text').val('');
+			//$('.text').val('');
 			$('#modalAddSimpanan input[name=ket]').focus();
 			$('.overlay').css('display','block');
 			$('.overlay').height($(document).height());
@@ -36,7 +36,7 @@ $(document).ready(function(){
 		
 		
 		add_angsuran=function (id_mrbh,nilai){
-			$('.text').val('');
+			//$('.text').val('');
 			$('#modalAddAngsuran input[name=ket]').focus();
 			$('.overlay').css('display','block');
 			$('.overlay').height($(document).height());
@@ -52,7 +52,7 @@ $(document).ready(function(){
 		}
 		
 		add_berek=function (kode_berek){
-			$('.text').val('');
+			//$('.text').val('');
 			$('#modalAddBerek input[name=ket]').focus();
 			$('.overlay').css('display','block');
 			$('.overlay').height($(document).height());
@@ -67,7 +67,7 @@ $(document).ready(function(){
 		}
 		
 		add_murabahah=function (kode_berek){
-			$('.text').val('');
+			//$('.text').val('');
 			$('#modalAddMurabahah input[name=ket]').focus();
 			$('.overlay').css('display','block');
 			$('.overlay').height($(document).height());
