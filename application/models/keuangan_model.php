@@ -179,14 +179,21 @@ class Keuangan_model extends CI_Model {
 	
 	function fetch_recent_kas_keluar(){
 		$sql = "select distinct ket from d_kas where jenis='K' 
-				AND MONTH(tgl_trans) = MONTH(CURRENT_DATE - INTERVAL 2 MONTH)";
+				AND MONTH(tgl_trans) = MONTH(CURRENT_DATE - INTERVAL 2 MONTH)
+				AND ket not in (
+					select distinct ket from d_kas where jenis='K' 
+					AND MONTH(tgl_trans) = MONTH(CURRENT_DATE - INTERVAL 0 MONTH)
+				)";
 		#echo "<pre>$sql</pre>";		
 		$data = $this->db->query($sql);
 		return $data;	
 	}
 	
 	/****
-	Tanggal pendistribusian JASA otomatis tanggal 28
+	Tanggal pendistribusian JASA otomatis tanggal 28 bulan 
+	Rumus : 
+	- JASA $ANGGOTA = LABA KOP. YG HARUS DIBAGI x SIMP. SUKARELA $ANGGOTA / SELURUH SIMP. WAJIB + SUKARELA   
+	- LABA KOP. YG HARUS DIBAGI = (0.42 * TOTAL JASA MRBH) + 0.50* TOTAL JASA BLANJA + 0.5 * TOTAL JASA REK 
 	*/
 	function _bagi_jasa_dan_kompensasi($periode,$text_periode){
 		
@@ -199,7 +206,7 @@ class Keuangan_model extends CI_Model {
 		$tgl_akhir = substr($periode,0,4).substr($periode,-2)."28";
 		
 		$sql = "insert into d_simpanan(id_anggota,nilai,kode_simpanan,ket,tgl_trans,tgl_input,ip)
-				select id_anggota,(t_laba_mrbh+t_laba_berek)*saldo_agt/total_saldo,'JS','Jasa $text_periode',str_to_date('$tgl_akhir 01:01:01','%Y%m%d %H:%i:%s'),now(),'server' 
+				select id_anggota,(t_laba_mrbh+t_laba_berek)*saldo_agt/total_saldo,'JS',concat('Jasa $text_periode, laba ',t_laba_mrbh+t_laba_berek),str_to_date('$tgl_akhir 01:01:01','%Y%m%d %H:%i:%s'),now(),'server' 
 				from 
 				(
 				select id_anggota,t_laba_mrbh,t_laba_berek,sum(nilai) saldo_agt,total_saldo
@@ -236,10 +243,11 @@ class Keuangan_model extends CI_Model {
 		$data = $this->db->query($sql);
 		#echo "<pre>$sql</pre>";
 		
-		/****
+		/***************************************************
+		KOMPENSASI KE PENGUSAHA 
 		30% dari laba akan kembali kepada anggota tersebut 
 		Laba = Nilai yang diangsur-modal tiap angsuran
-		*/
+		****************************************************/
 		$sql_kompensasi = "insert into d_simpanan(id_anggota,nilai,kode_simpanan,ket,tgl_trans,tgl_input,ip)
 							select id_anggota,sum(diangsur-((modal*diangsur/jual)))*0.3,'KP','Konpensasi $text_periode',str_to_date('$tgl_akhir 01:01:01','%Y%m%d %H:%i:%s'),now(),'server'
 												from m_murabahah  m, (

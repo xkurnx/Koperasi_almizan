@@ -179,7 +179,7 @@ class Laporan_model extends CI_Model {
 		}
 		
 		
-		function daftar_simpanan($tahun){
+	 function rekap_simpanan_by_tahun($tahun){
 			$sql = "select nama,s_simpanan.* from m_anggota 
 					left outer join
 					(   select d_simpanan.id_anggota,
@@ -202,7 +202,38 @@ class Laporan_model extends CI_Model {
 			return $data;
 		}
 		 
+	 function rekap_simpanan_by_bulan($periode){
+		$tgl_satu = "01-".substr($periode,-2)."-".substr($periode,0,4);
+		$tgl_akhir = "28-".substr($periode,-2)."-".substr($periode,0,4);
 		
+		$sql = "select nama,t_simpanan.* from m_anggota 
+				left outer join
+				(
+				select id_anggota, 
+				sum(case when tgl_trans < str_to_date('$tgl_satu 00:00:00','%d-%m-%Y %H:%i:%s') and kode_simpanan IN ('SP') then nilai else 0 end) SP_SAWAL,
+				sum(case when DATE_FORMAT(tgl_trans, '%Y%m') ='$periode'  AND kode_simpanan IN ('SP') AND nilai > 0 then nilai else 0 end) SP_M,
+				sum(case when DATE_FORMAT(tgl_trans, '%Y%m') ='$periode'  AND kode_simpanan IN ('SP') AND nilai < 0 then nilai else 0 end) SP_K,
+				sum(case when tgl_trans <= str_to_date('$tgl_akhir 00:00:00','%d-%m-%Y %H:%i:%s') and kode_simpanan IN ('SW') then nilai else 0 end) SP_SAKHIR,
+				
+				sum(case when tgl_trans < str_to_date('$tgl_satu 00:00:00','%d-%m-%Y %H:%i:%s') and kode_simpanan IN ('SW') then nilai else 0 end) SW_SAWAL,
+				sum(case when DATE_FORMAT(tgl_trans, '%Y%m') ='$periode'  AND kode_simpanan IN ('SW') AND nilai > 0 then nilai else 0 end) SW_M,
+				sum(case when DATE_FORMAT(tgl_trans, '%Y%m') ='$periode'  AND kode_simpanan IN ('SW') AND nilai < 0 then nilai else 0 end) SW_K,
+				sum(case when tgl_trans <= str_to_date('$tgl_akhir 00:00:00','%d-%m-%Y %H:%i:%s') and kode_simpanan IN ('SW') then nilai else 0 end) SW_SAKHIR,
+				
+				sum(case when tgl_trans < str_to_date('$tgl_satu 00:00:00','%d-%m-%Y %H:%i:%s') and kode_simpanan IN ('SK') then nilai else 0 end) SK_SAWAL,
+				sum(case when DATE_FORMAT(tgl_trans, '%Y%m') ='$periode' and kode_simpanan IN ('SK') AND nilai > 0 then nilai else 0 end) SK_M,
+				sum(case when DATE_FORMAT(tgl_trans, '%Y%m') ='$periode' and kode_simpanan IN ('SK') AND nilai < 0 then nilai else 0 end) SK_K,
+				sum(case when tgl_trans <= str_to_date('$tgl_akhir 00:00:00','%d-%m-%Y %H:%i:%s') and kode_simpanan IN ('SK') then nilai else 0 end) SK_SAKHIR
+				from d_simpanan
+				group by id_anggota
+				) t_simpanan
+				on m_anggota.id_anggota=t_simpanan.id_anggota
+				where tmt_aktif <= STR_TO_DATE('$periode"."28"."', '%Y%m%d') 
+				";
+		#echo "<pre>$sql</pre>";
+		$data = $this->db->query($sql);
+		return $data;		
+		}	
 	 
 	}
 ?>	 

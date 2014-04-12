@@ -33,6 +33,7 @@ class Laporan extends CI_Controller {
 	function transaksi_harian($periode){
 		$this->kur_auth->is_logged_in();
 		$this->kur_auth->allowed(array(0));
+		
 		$data_table['periode'] = $periode;
 		$data_table['action'] = site_url('trans/add');
 		$data_table['periode_text'] = $this->kur_functions->periode_to_text($periode);
@@ -51,14 +52,24 @@ class Laporan extends CI_Controller {
 		$this->load->view('laporanView', $data);	
 	}
 	
-	function daftar_simpanan($tahun){
+	function rekap_simpanan($periode){
 		$this->kur_auth->is_logged_in();
-		$data_table['base_url'] = site_url('laporan/daftar_simpanan');
-		$data_table['trans'] = $this->Laporan_model->daftar_simpanan($tahun)->result();
+		$this->kur_auth->allowed(array(0));
+		
+		$data['title'] = "Rekap Simpanan Anggota - ".$this->kur_functions->periode_to_text($periode);
 		$data['name_login'] = $this->session->userdata('kop_sess_username');
-		print_r($data_table['trans']);
+		
+		
+		$data_table['periode'] = $periode;
+		$data_table['action'] = site_url('trans/add');
+		$data_table['periode_text'] = $this->kur_functions->periode_to_text($periode);
+		$data_table['base_url'] = site_url('laporan/transaksi_harian');
+		
+		$data_table['rekap'] = $this->Laporan_model->rekap_simpanan_by_bulan($periode)->result();
+		
+		#print_r($data_table['trans']);
 		// load view
-		$html_table = $this->load->view('tableKasHarian', $data_table,true);
+		$html_table = $this->load->view('tableRekapSimpanan', $data_table,true);
 		$data['role_user'] = $this->session->userdata('kop_sess_role');		
 		$data['html_table'] = $html_table;
 		$this->load->view('laporanView', $data);	

@@ -75,7 +75,7 @@ class Kas extends CI_Controller {
 		$this->table->add_row($cell, $nilai);	
 		$data['role_user'] = $this->session->userdata('kop_sess_role');
 		$data['title'] = 'Transaksi Kas periode '.$this->kur_functions->periode_to_text($periode);
-		$data['link_add'] = "<a href=\"javascript:add_kas('kas','".strtoupper($type)."')\" class='add'>Tambah Transaksi</a>";
+		$data['link_add'] = "<a href=\"javascript:add_kas('kas','".strtoupper($type)."')\" class='add'>Tambah satu Transaksi Masuk/Keluar</a>";
 		$data['link_back'] = '<a class="back" href="javascript:window.history.back()">Kembali</a>';
 		
 		$data['table'] = $this->table->generate();
