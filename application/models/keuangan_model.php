@@ -162,14 +162,15 @@ class Keuangan_model extends CI_Model {
 		return $data;		
 	}
 	
-	function fetch_kas($jenis,$periode=''){
+	function fetch_kas($jenis,$periode='',$limit = 10, $offset = 0){
 				
 		$sql_jenis =  ( $jenis != 'ALL' )? " and jenis='$jenis'" :"";
 		$sql = "select idx,case when jenis='M' then 'Kas Masuk' else 'Kas Keluar' end jenis_format,
 				case when DATE_ADD(tgl_input,INTERVAL 3	 DAY) <= now() OR tgl_input is null then 0 else 1 end is_deletable,
 				tgl_trans,ket,nilai from d_kas				
 				where 1=1 $sql_jenis
-				order by tgl_trans desc,idx asc";
+				order by tgl_trans desc,idx asc
+				limit $offset, $limit";
 		#echo $sql;
 		$data = $this->db->query($sql);
 		return $data;	
@@ -179,6 +180,7 @@ class Keuangan_model extends CI_Model {
 	function fetch_recent_kas_keluar(){
 		$sql = "select distinct ket from d_kas where jenis='K' 
 				AND MONTH(tgl_trans) = MONTH(CURRENT_DATE - INTERVAL 2 MONTH)";
+		#echo "<pre>$sql</pre>";		
 		$data = $this->db->query($sql);
 		return $data;	
 	}

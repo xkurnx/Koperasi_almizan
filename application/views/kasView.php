@@ -40,6 +40,7 @@
 		 <input type="submit" value="OK">
 		 </form>
 		<?php if ( isset($link_add) ) echo $link_add;?>
+		<div class="paging"><?php echo $pagination; ?></div>
 		<div class="data"><?php echo $table; ?></div>
 		<br />
 		<?php echo $link_back; ?>
