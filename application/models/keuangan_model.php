@@ -48,7 +48,7 @@ class Keuangan_model extends CI_Model {
 							where id_anggota=$id 
 							$query_tgl_trans
 					) as h      
-							order by tgl_trans desc
+							order by tgl_trans desc, ket desc
 							limit 15
 				
 		";

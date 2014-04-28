@@ -89,6 +89,7 @@ class Anggota extends CI_Controller {
 		$this->kur_auth->is_logged_in();
 		$this->kur_auth->allowed(array(0));
 		$this->_view($id,$periode);	
+		
 	}
 	
 	function cetak( $id,$periode='' ){

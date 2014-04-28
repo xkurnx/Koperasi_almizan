@@ -163,7 +163,7 @@ class Laporan_model extends CI_Model {
 				union
 				/* tarik simpanan */
 				select 'KK' jenis,DATE_FORMAT(tgl_trans, '%m-%d-%Y') tgl,
-				concat('Tarik Simpanan ',nama) nama,0 SW,0 SK,0 id_anggota,0 pokok_pinj,0 laba_pinj,
+				concat('Trk Simp. ',nama) nama,0 SW,0 SK,0 id_anggota,0 pokok_pinj,0 laba_pinj,
 				0 pokok_bl,0 pokok_rk,0 jasa_bl,0 jasa_rk,
 				0 denda,0,abs(nilai) pengeluaran
 				from m_anggota,d_simpanan
