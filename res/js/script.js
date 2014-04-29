@@ -35,7 +35,7 @@ $(document).ready(function(){
 		}
 		
 		
-		add_angsuran=function (id_mrbh,nilai){
+		add_angsuran=function (id_mrbh,kategori,nilai){
 			//$('.text').val('');
 			$('#modalAddAngsuran input[name=ket]').focus();
 			$('.overlay').css('display','block');
@@ -48,6 +48,7 @@ $(document).ready(function(){
 					top: (h - $('.modalBox').height()) / 2
 				});
 			$('#modalAddAngsuran input[name=id_mrbh]').val(id_mrbh);
+			$('#modalAddAngsuran input[name=kategori]').val(kategori);
 			$('#modalAddAngsuran input[name=nilai]').val(nilai);
 		}
 		

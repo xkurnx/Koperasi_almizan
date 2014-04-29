@@ -81,7 +81,7 @@ $tgl_default = "05-05-2013";
 				
 				<?php
 				foreach ($murabahah as $data ):
-					$html = ( $data->diangsur >= $data->jual )?" <span class='lunas'>- lunas</span>":"<a href=\"javascript:add_angsuran($data->id_mrbh,'".($data->jual/$data->jgk)."')\" class='add'>tbh trans</a>";
+					$html = ( $data->diangsur >= $data->jual )?" <span class='lunas'>- lunas</span>":"<a href=\"javascript:add_angsuran($data->id_mrbh,'MRBH','".($data->jual/$data->jgk)."')\" class='add'>tbh trans</a>";
 					echo "<tr><td>$data->ket <br/ >$html </td>";
 					echo "<td>$data->jgk</td><td>$data->angsuran_ke</td>";
 					echo "<td class='w20'>Rp.</td><td class='uang'>".number_format($data->jual,2,',','.')."</td>";
@@ -103,7 +103,7 @@ $tgl_default = "05-05-2013";
 				
 				<?php
 				foreach ($qordunhasan as $data ):
-					$html = ( $data->diangsur >= $data->jual )?" <span class='lunas'>- lunas</span>":"<a href=\"javascript:add_angsuran($data->id_qhasan,'".($data->jual/$data->jgk)."')\" class='add'>tbh trans</a>";
+					$html = ( $data->diangsur >= $data->jual )?" <span class='lunas'>- lunas</span>":"<a href=\"javascript:add_angsuran($data->id_qhasan,'QHASAN','".($data->jual/$data->jgk)."')\" class='add'>tbh trans</a>";
 					echo "<tr><td>$data->ket <br/ >$html </td>";
 					echo "<td>$data->jgk</td><td>$data->angsuran_ke</td>";
 					echo "<td class='w20'>Rp.</td><td class='uang'>".number_format($data->jual,2,',','.')."</td>";
@@ -162,6 +162,7 @@ $tgl_default = "05-05-2013";
 			<input type="text" value="<?php echo $tgl_default ;?>" class="text tgl_trans" name="tgl_trans_angsuran"><a onclick="displayDatePicker('tgl_trans_angsuran');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
 			<input type="hidden" name="jenis_trans" value="angsuran">
 			<input type="hidden" name="id_mrbh" value="">
+			<input type="hidden" name="kategori" value="">
 			<input type="hidden" name="id_anggota" value="<?php echo $person->id_anggota;?>">
 			<br />
 			<input type="button" class="btnSubmit" value="OK">
