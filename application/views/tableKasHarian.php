@@ -77,8 +77,10 @@ $i++;
 $kas_masuk = $result->SW + $result->SK + $result->pokok_pinj + $result->laba_pinj
 		+ $result->pokok_rk + $result->pokok_bl + $result->jasa_rk + $result->jasa_bl + $result->denda + $result->pemasukan ;
 $j_kas = $j_kas + $kas_masuk - $result->pengeluaran;
+
+$zebra_style = ( $i % 2 == 0 ? "odd": "");
 ?>
-<tr>
+<tr class="<?php echo $zebra_style;?>">
 <td class="alignRight"><?php echo $i;?></td>
 <td><?php echo $result->jenis;?></td>
 <td><?php echo $result->tgl;?></td>

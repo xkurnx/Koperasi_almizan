@@ -172,6 +172,11 @@ div.content div.data table th {
 
 /* table small, for long report */
 
+/* zebra style */
+div.content div.data table.report tr.odd{
+	background:#CCC;
+}
+
 div.content div.data table.report th,
 div.content div.data table.report td{
 	font-size:0.7em;
