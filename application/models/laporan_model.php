@@ -120,7 +120,21 @@ class Laporan_model extends CI_Model {
 					on m_anggota.id_anggota = r_berek.id_anggota	
 				where tmt_aktif <= STR_TO_DATE('$periode"."28"."', '%Y%m%d')	/* munculkan hanya tmt <= periode berjalan */				
 				union
-				/* KK : murabahah */
+				/******************************
+				KM : cicilan Qordun Hasan */
+				select 'KM',tgl_pencairan,concat('Angs Q.Hasan - ',m_qhasan.ket) ket, null id_anggota,0 SW,0 SP,
+				0 pokok_pinj, 0 laba_pinj,
+				0 pokok_bl,0 pokok_rk,				
+				0 jasa_bl,0 jasa_rk,
+				0 denda,d_angsuran.nilai,0
+				FROM d_angsuran, m_anggota, m_qhasan
+				where m_qhasan.id_anggota = m_anggota.id_anggota
+				and d_angsuran.id_mrbh = m_qhasan.id_qhasan
+				and d_angsuran.kategori = 'QHASAN'
+				and DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
+				union
+				/********************************
+				* KK : murabahah */
 				select 'KK',tgl_pencairan,concat('Murabahah - ',ket) ket, null id_anggota,0 SW,0 SP,
 				0 pokok_pinj, 0 laba_pinj,
 				0 pokok_bl,0 pokok_rk,				
@@ -130,7 +144,8 @@ class Laporan_model extends CI_Model {
 				where m_anggota.id_anggota = m_murabahah.id_anggota
 				and DATE_FORMAT(tgl_pencairan, '%Y%m')='$periode'
 				union
-				/* KK : Qordun Hasan */
+				/*******************************
+				KK : Qordun Hasan */
 				select 'KK',tgl_pencairan,concat('Qordun Hasan - ',ket) ket, null id_anggota,0 SW,0 SP,
 				0 pokok_pinj, 0 laba_pinj,
 				0 pokok_bl,0 pokok_rk,				
