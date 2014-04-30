@@ -183,6 +183,8 @@ div.content div.data table.report td{
 	padding:1px 4px;
 }
 
+td.red{ background:red}
+
 
 div.paging {
 	font-size: 9pt;

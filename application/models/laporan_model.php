@@ -249,6 +249,22 @@ class Laporan_model extends CI_Model {
 		$data = $this->db->query($sql);
 		return $data;		
 		}	
+		
+		function get_nunggak($periode){
+			$sql = "select m.id_mrbh,m.id_anggota,tahun,ket,jual,jgk,tgl_pencairan, angsuran_ke,last_angsur,urut_mrbh,diangsur 
+					from m_murabahah  m 
+									left outer join (
+									select id_mrbh,sum(nilai) diangsur,max(tgl_trans) last_angsur,sum(case when ket not like '%migrasi%'then 1 else 0 end ) angsuran_ke 
+													from d_angsuran
+													where 1=1     
+											group by id_mrbh
+									) as a on a.id_mrbh=m.id_mrbh
+							where 1=1
+						   and diangsur <=jual 
+						   and date_format(last_angsur,'%Y%m') < '$periode'";
+		$data = $this->db->query($sql);
+		return $data;
+		}
 	 
 	}
 ?>	 

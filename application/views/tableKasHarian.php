@@ -70,6 +70,14 @@ $j_kas = $saldo_awal;
 
 
 <?php
+//print_r($nunggak);
+
+/* convert data nunggak ke array yg id_anggota sbg_key */
+$penunggak = array();
+foreach ($nunggak as $result){
+	// "nunggak" akan digunakan sebagai CSS 
+	$penunggak[$result->id_anggota] = "red";
+}
 
 foreach ($trans as $result)
 {
@@ -87,8 +95,8 @@ $zebra_style = ( $i % 2 == 0 ? "odd": "");
 <td class="nama_trans" rel="<?php echo $result->id_anggota;?>"><?php echo $result->nama;?></td>
 <td class="alignRight"><?php echo number_format($result->SW);?></td>
 <td class="alignRight"><?php echo number_format($result->SK);?></td>
-<td class="alignRight"><?php echo number_format($result->pokok_pinj);?></td>
-<td class="alignRight"><?php echo number_format($result->laba_pinj);?></td>
+<td class="alignRight <?php echo ( isset($penunggak[$result->id_anggota]) ) ?"red":"";?>"><?php echo number_format($result->pokok_pinj);?></td>
+<td class="alignRight <?php echo ( isset($penunggak[$result->id_anggota]) ) ?"red":"";?>"><?php echo number_format($result->laba_pinj);?></td>
 <td class="alignRight"><?php echo number_format($result->pokok_rk);?></td>
 <td class="alignRight"><?php echo number_format($result->jasa_rk);?></td>
 <td class="alignRight"><?php echo number_format($result->pokok_bl);?></td>

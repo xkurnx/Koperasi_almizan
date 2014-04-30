@@ -31,7 +31,7 @@ class Keuangan_model extends CI_Model {
 			$query_tgl_trans = ($this->periode == '' ) ? "":"and date_format(tgl_trans,'%Y%m')='$this->periode'";	
 			
 			$sql = "select idx,date_format(tgl_trans,'%d-%m-%Y') tgl_trans_format,jenis,nilai,ket,tabel,
-						case when DATE_ADD(tgl_input,INTERVAL 2 DAY) <= now() OR tgl_input is null then 0 else 1 end is_deletable from
+						case when DATE_ADD(tgl_input,INTERVAL 4 DAY) <= now() OR tgl_input is null then 0 else 1 end is_deletable from
 					( select idx,tgl_trans,tgl_input, 
 									concat(case when nilai < 0 then 'penarikan' else 'penyetoran' end,' ',kode_simpanan) as jenis,nilai,ket,'simpanan' tabel
 									from d_simpanan				
@@ -198,7 +198,7 @@ class Keuangan_model extends CI_Model {
 	function _bagi_jasa_dan_kompensasi($periode,$text_periode){
 		
 		/* hapus dulu data JASA dan KOMPENSASI lama */
-		$sql_del = "delete from d_simpanan where DATE_FORMAT(tgl_trans, '%Y%m')='$periode' and kode_simpanan in ('JS','KP')";
+		$sql_del = "delete from d_simpanan where DATE_FORMAT(tgl_trans, '%Y%m')='$periode' and kode_simpanan in ('JS','KP') and nilai>0";
 		echo $this->db->simple_query($sql_del);	
 		
 		/* bagi-bagi JASA dan KOMPENSASI */
