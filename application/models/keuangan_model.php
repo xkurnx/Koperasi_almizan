@@ -33,7 +33,7 @@ class Keuangan_model extends CI_Model {
 			$sql = "select idx,date_format(tgl_trans,'%d-%m-%Y') tgl_trans_format,jenis,nilai,ket,tabel,
 						case when DATE_ADD(tgl_input,INTERVAL 4 DAY) <= now() OR tgl_input is null then 0 else 1 end is_deletable from
 					( select idx,tgl_trans,tgl_input, 
-									concat(case when nilai < 0 then 'penarikan' else 'penyetoran' end,' ',kode_simpanan) as jenis,nilai,ket,'simpanan' tabel
+									concat(case when nilai < 0 then 'tarik' else 'setor' end,' ',kode_simpanan) as jenis,nilai,ket,'simpanan' tabel
 									from d_simpanan				
 									where id_anggota=$id
 									$query_tgl_trans
@@ -70,6 +70,7 @@ class Keuangan_model extends CI_Model {
 		$sql = "select sum(case when kode_simpanan='SP' then nilai end) as T_SP,
 				sum(case when kode_simpanan='SW' then nilai end) as T_SW,
 				sum(case when kode_simpanan='SK' then nilai end) as T_SK,
+				sum(case when kode_simpanan='KP' then nilai end) as T_KP,
 				sum(case when kode_simpanan='JS' then nilai end) as T_JS				
 				from d_simpanan
 				where id_anggota=$id
@@ -182,7 +183,7 @@ class Keuangan_model extends CI_Model {
 				AND MONTH(tgl_trans) = MONTH(CURRENT_DATE - INTERVAL 2 MONTH)
 				AND ket not in (
 					select distinct ket from d_kas where jenis='K' 
-					AND MONTH(tgl_trans) = MONTH(CURRENT_DATE - INTERVAL 0 MONTH)
+					AND MONTH(tgl_trans) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
 				)";
 		#echo "<pre>$sql</pre>";		
 		$data = $this->db->query($sql);
@@ -280,6 +281,53 @@ class Keuangan_model extends CI_Model {
 	}
 	
 	
+	
+	
+	/****************
+	copy trans bulan lalu, tp delete dulu trans nya
+	1. delete trans d_simpanan d_angsuran bulan sekarang
+	2. insert into d_simpanan from bulan_lalu where nilai > 0 and kode in ('SW','SK')
+	3. insert into d_angsuran from bulan lalu  
+	*/
+	function copy_trans_bulan_lalu($periode){
+	 // 1. delete trans d_simpanan dan d_angsuran bulan sekarang
+		$sql = "delete from d_simpanan 
+				where kode_simpanan in ('SW','SK') 
+				and nilai > 0
+				and DATE_FORMAT(TGL_TRANS,'%Y%m')='$periode'
+				and nilai < 1000000";
+		#$this->db->query($sql);	
+		
+		$sql = "delete from d_angsuran
+				where  nilai > 0
+				and DATE_FORMAT(TGL_TRANS,'%Y%m')='$periode'
+				and nilai < 1000000";
+		#$this->db->query($sql);
+		
+	// 	2. insert into d_simpanan from bulan_lalu where nilai > 0 and kode in ('SW','SK') 
+		$sql = "insert into d_simpanan(id_anggota,nilai,kode_simpanan,ket,tgl_trans,tgl_input,ip)
+				select id_anggota,nilai,kode_simpanan,ket,DATE_ADD(TGL_TRANS,interval 1 month),tgl_input,'server' from d_simpanan 
+								where kode_simpanan in ('SW','SK') 
+								and nilai > 0
+								and nilai < 1000000
+						and DATE_FORMAT(DATE_ADD(TGL_TRANS,interval 1 month),'%Y%m')='$periode'";
+		#$this->db->query($sql);	
+	
+	//  3. insert angsuran bulan lalu
+		$sql = "insert into d_angsuran(id_mrbh,kategori,nilai,denda,tgl_trans,tgl_input,operator,ket,ip)
+				select m.id_mrbh,'MRBH',nilai,denda,DATE_ADD(TGL_TRANS,interval 1 month),now(),
+				'138',concat('Angsuran ke ',angsuran_ke+1),'server' ip from d_angsuran m 
+				left outer join (
+					  select id_mrbh,sum(nilai) diangsur,max(tgl_trans) last_angsur,sum(case when ket not like '%migrasi%'then 1 else 0 end ) angsuran_ke 
+									from d_angsuran
+									where 1=1     
+									group by id_mrbh
+						) as a 
+					on a.id_mrbh=m.id_mrbh  
+					where 1=1       
+					and DATE_FORMAT(DATE_ADD(TGL_TRANS,interval 1 month),'%Y%m')='$periode'";
+		#$this->db->query($sql);
+	}	
 	
 	
 	function save($table,$data){

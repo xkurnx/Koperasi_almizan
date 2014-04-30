@@ -15,7 +15,7 @@
 
 <?php
 // tgl transaksi default setiap tgl 5
-$tgl_default = "05-05-2013";
+$tgl_default = "05-06-2013";
 ?>
 </head>
 <body>
@@ -49,10 +49,11 @@ $tgl_default = "05-05-2013";
 				<td>
 				<table class='w400 noBorder'>
 				<?php
-				 echo "<tr><td>Simpanan Pokok <a href=\"javascript:add_simpanan('SP')\" class='add'>tambah transaksi (pengmb. aset)</a></td></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/SP/'.$person->id_anggota)."'>".number_format($simpanan->T_SP,2,',','.')."</a></td></tr>";
+				 echo "<tr><td>Simpanan Pokok <a href=\"javascript:add_simpanan('SP')\" class='add'>tambah transaksi (khusus agt baru / pengmb. aset)</a></td></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/SP/'.$person->id_anggota)."'>".number_format($simpanan->T_SP,2,',','.')."</a></td></tr>";
 				 echo "<tr><td>Simpanan Wajib <a href=\"javascript:add_simpanan('SW','65000')\" class='add'>tambah transaksi</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/SW/'.$person->id_anggota)."'>".number_format($simpanan->T_SW,2,',','.')."</a></td></tr>";
 				 echo "<tr><td>Simpanan Sukarela <a href=\"javascript:add_simpanan('SK','50000')\" class='add'>tambah transaksi</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/SK/'.$person->id_anggota)."'>".number_format($simpanan->T_SK,2,',','.')."</a></td></tr>";
-				 echo "<tr><td>Jasa Simpanan Sukarela <a href=\"javascript:add_simpanan('JS','0')\" class='add'>tambah transaksi (pengmb. aset)</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/JS/'.$person->id_anggota)."'>".number_format($simpanan->T_JS,2,',','.')."</a></td></tr>";				 
+				 echo "<tr><td>Jasa Simpanan Sukarela <a href=\"javascript:add_simpanan('JS','0')\" class='add'>tambah transaksi (khusus pengmb. aset)</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/JS/'.$person->id_anggota)."'>".number_format($simpanan->T_JS,2,',','.')."</a></td></tr>";				 
+				 echo "<tr><td>Kompensasi Sukarela <a href=\"javascript:add_simpanan('KP','-".$simpanan->T_KP."')\" class='add'>tambah transaksi (khusus pengmb. aset)</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/KP/'.$person->id_anggota)."'>".number_format($simpanan->T_KP,2,',','.')."</a></td></tr>";				 
 				 echo "<tr><td>Jumlah Simpanan</td><td class='w20'>Rp.</td><td class='uang'> <strong>".number_format($simpanan->T_SP + $simpanan->T_SW + $simpanan->T_SK + $simpanan->T_JS,2,',','.')."</strong></td></tr>";
 				?>
 				</table>
@@ -81,7 +82,7 @@ $tgl_default = "05-05-2013";
 				
 				<?php
 				foreach ($murabahah as $data ):
-					$html = ( $data->diangsur >= $data->jual )?" <span class='lunas'>- lunas</span>":"<a href=\"javascript:add_angsuran($data->id_mrbh,'MRBH','".($data->jual/$data->jgk)."')\" class='add'>tbh trans</a>";
+					$html = ( $data->diangsur >= $data->jual or $data->diangsur + 4 >= $data->jual )?" <span class='lunas'>- lunas</span>":"<a href=\"javascript:add_angsuran($data->id_mrbh,'MRBH','".($data->jual/$data->jgk)."')\" class='add'>tbh trans</a>";
 					echo "<tr><td>$data->ket <br/ >$html </td>";
 					echo "<td>$data->jgk</td><td>$data->angsuran_ke</td>";
 					echo "<td class='w20'>Rp.</td><td class='uang'>".number_format($data->jual,2,',','.')."</td>";

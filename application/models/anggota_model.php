@@ -33,7 +33,7 @@ class Anggota_model extends CI_Model {
 	
 	function update($id, $person){
 		$this->db->where('id_anggota', $id);
-		$this->db->update($this->tbl_person, $person);
+		 $this->db->update($this->tbl_person, $person) ;
 	}
 	
 	function delete($id){

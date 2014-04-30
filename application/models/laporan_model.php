@@ -118,7 +118,8 @@ class Laporan_model extends CI_Model {
 					group by id_anggota
 					) r_berek
 					on m_anggota.id_anggota = r_berek.id_anggota	
-				where tmt_aktif <= STR_TO_DATE('$periode"."28"."', '%Y%m%d')	/* munculkan hanya tmt <= periode berjalan */				
+				where tmt_aktif <= STR_TO_DATE('$periode"."28"."', '%Y%m%d')	/* munculkan hanya tmt <= periode berjalan */	
+				and DATE_ADD(COALESCE(tmt_nonaktif,STR_TO_DATE('20201231', '%Y%m%d')),INTERVAL 1 MONTH) >= STR_TO_DATE('$periode"."28"."', '%Y%m%d')  /* sembunyikan yg udah non aktif  */	
 				union
 				/******************************
 				KM : cicilan Qordun Hasan */
@@ -178,7 +179,7 @@ class Laporan_model extends CI_Model {
 				union
 				/* tarik simpanan */
 				select 'KK' jenis,DATE_FORMAT(tgl_trans, '%m-%d-%Y') tgl,
-				concat('Trk Simp. ',nama) nama,0 SW,0 SK,0 id_anggota,0 pokok_pinj,0 laba_pinj,
+				concat('Trk ',kode_simpanan,' ',nama) nama,0 SW,0 SK,0 id_anggota,0 pokok_pinj,0 laba_pinj,
 				0 pokok_bl,0 pokok_rk,0 jasa_bl,0 jasa_rk,
 				0 denda,0,abs(nilai) pengeluaran
 				from m_anggota,d_simpanan
@@ -251,17 +252,21 @@ class Laporan_model extends CI_Model {
 		}	
 		
 		function get_nunggak($periode){
-			$sql = "select m.id_mrbh,m.id_anggota,tahun,ket,jual,jgk,tgl_pencairan, angsuran_ke,last_angsur,urut_mrbh,diangsur 
+			$sql = "select COALESCE(last_angsur,'4/10/20'),m.id_mrbh,m.id_anggota,tahun,ket,jual,jgk,tgl_pencairan, angsuran_ke,last_angsur,urut_mrbh,diangsur,
+					case 
+					when (date_format(last_angsur,'%Y%m') < '$periode'  or last_angsur is null  ) then 'red'
+					end status_cicilan
 					from m_murabahah  m 
 									left outer join (
 									select id_mrbh,sum(nilai) diangsur,max(tgl_trans) last_angsur,sum(case when ket not like '%migrasi%'then 1 else 0 end ) angsuran_ke 
 													from d_angsuran
-													where 1=1     
+													where 1=1       
+                     --     and id_mrbh=68
 											group by id_mrbh
-									) as a on a.id_mrbh=m.id_mrbh
-							where 1=1
-						   and diangsur <=jual 
-						   and date_format(last_angsur,'%Y%m') < '$periode'";
+									) as a 
+                  on a.id_mrbh=m.id_mrbh 
+					where 1=1
+					and diangsur<jual";
 		$data = $this->db->query($sql);
 		return $data;
 		}

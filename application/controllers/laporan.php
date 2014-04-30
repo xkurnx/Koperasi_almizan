@@ -25,7 +25,7 @@ class Laporan extends CI_Controller {
 		// offset
 		$this->kur_auth->is_logged_in();
 		$this->kur_auth->allowed(array(0));
-		$periode = '201305';
+		$periode = '201306';
 		$this->transaksi_harian($periode);	
 		
 	}

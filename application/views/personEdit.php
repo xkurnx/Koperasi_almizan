@@ -25,8 +25,8 @@
 		<table>
 			<tr>
 				<td width="30%">Nomor Anggota</td>
-				<td><input type="text" name="id" disabled="disable" class="text" value="<?php echo set_value('id'); ?>"/></td>
-				<input type="hidden" name="id" value="<?php echo set_value('id',$this->form_data->id_anggota); ?>"/>
+				<td><input type="text" name="id" class="text" value="<?php echo set_value('id',$this->form_data->id_anggota); ?>"/></td>
+				<inputx type="hidden" name="id" value="<?php echo set_value('id',$this->form_data->id_anggota); ?>"/>
 			</tr>
 			<tr>
 				<td valign="top">Nama<span style="color:red;">*</span></td>
@@ -45,6 +45,14 @@
 				<td valign="top">TMT aktif (dd-mm-yyyy)<span style="color:red;">*</span></td>
 				<td><input type="text" name="tmt_aktif" onclick="displayDatePicker('tmt_aktif');" class="text" value="<?php echo set_value('tmt_aktif',$this->form_data->tmt_aktif); ?>"/>
 				<a href="javascript:void(0);" onclick="displayDatePicker('tmt_aktif');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
+<?php echo form_error('tmt_aktif'); ?></td>
+				</td>
+			</tr>
+			
+			<tr>
+				<td valign="top">TMT non-aktif (dd-mm-yyyy)<span style="color:red;">*</span></td>
+				<td><input type="text" name="tmt_nonaktif" onclick="displayDatePicker('tmt_nonaktif');" class="text" value="<?php echo set_value('tmt_nonaktif',$this->form_data->tmt_nonaktif); ?>"/>
+				<a href="javascript:void(0);" onclick="displayDatePicker('tmt_nonaktif');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
 <?php echo form_error('tmt_aktif'); ?></td>
 				</td>
 			</tr>

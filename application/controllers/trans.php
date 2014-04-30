@@ -299,6 +299,8 @@ class Trans extends CI_Controller {
 	
 	/* untuk multiple FIELDs pengeluaran */
 	function multipleadd(){
+		$this->kur_auth->is_logged_in();
+		$this->kur_auth->allowed(array(0));
 		$nama_trans = $this->input->post('nama_trans');
 		$nilai_trans = $this->input->post('nilai_trans');
 		$tgl_trans = $this->input->post('tgl_trans');
@@ -324,6 +326,14 @@ class Trans extends CI_Controller {
 				
 	}
 	
+	function copy_trans_bulan_lalu()
+	{
+		$this->kur_auth->is_logged_in();
+		$this->kur_auth->allowed(array(0));
+		$this->Keuangan_model->copy_trans_bulan_lalu($this->input->post('periode'));
+		
+		// de
+	}
 	
 }
 ?>

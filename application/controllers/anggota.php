@@ -50,7 +50,7 @@ class Anggota extends CI_Controller {
 		{
 			$this->table->add_row(++$i, $person->id_anggota, $person->nama, strtoupper($person->jk)=='L'? 'Laki-laki':'Perempuan', date('d-m-Y',strtotime($person->tgl_lahir)), 
 				anchor('anggota/view/'.$person->id_anggota,'lihat detail',array('class'=>'view')).' '.
-				anchor('anggota/disable/'.$person->id_anggota,'nonaktifkan',array('class'=>'delete','onclick'=>"return confirm('Apakah anda yakin ingin men-nonaktifkan anggota ini?')"))
+				anchor('anggota/update/'.$person->id_anggota,'Ubah',array('class'=>'delete'))
 			);
 		}
 		$data['role_user'] = $this->session->userdata('kop_sess_role');
@@ -113,7 +113,7 @@ class Anggota extends CI_Controller {
 		$data['name_login'] = $this->session->userdata('kop_sess_username');
 		$data['action'] = site_url('trans/add');		
 		$data['link_back'] = anchor('anggota/index/','Kembali ke Daftar',array('class'=>'back'));
-		
+	
 		// get person details
 		$data['person'] = $this->Anggota_model->get_by_id($id)->row();
 		$data['periode'] = $periode;
@@ -164,6 +164,7 @@ class Anggota extends CI_Controller {
 		
 		$this->kur_auth->is_logged_in();
 		$this->kur_auth->allowed(array(0));
+		$data['name_login'] = $this->session->userdata('kop_sess_username');
 		// set validation properties
 		$this->_set_rules();
 		
@@ -171,6 +172,7 @@ class Anggota extends CI_Controller {
 		$person = $this->Anggota_model->get_by_id($id)->row();
 		$this->form_data->id_anggota = $id;
 		$this->form_data->tmt_aktif = $person->tmt_aktif;
+		$this->form_data->tmt_nonaktif = $person->tmt_nonaktif;
 		$this->form_data->nama = $person->nama;
 		$this->form_data->jk = strtoupper($person->jk);
 		$this->form_data->tgl_lahir = date('d-m-Y',strtotime($person->tgl_lahir));
@@ -187,11 +189,16 @@ class Anggota extends CI_Controller {
 	
 	function updateAnggota()
 	{
+		$this->kur_auth->is_logged_in();
+		$this->kur_auth->allowed(array(0));
+		$data['name_login'] = $this->session->userdata('kop_sess_username');
+		
 		// set common properties
 		$data['title'] = 'Update person';
 		$data['action'] = site_url('anggota/updateAnggota');
 		$data['link_back'] = anchor('anggota/index/','Back to list of persons',array('class'=>'back'));
-		
+		// save data
+		$id = $this->input->post('id');
 		// set empty default form field values
 		$this->_set_fields();
 		// set validation properties
@@ -204,13 +211,12 @@ class Anggota extends CI_Controller {
 		}
 		else
 		{
-			// save data
-			$id = $this->input->post('id');
 			$person = array('nama' => $this->input->post('nama'),
 							'jk' => $this->input->post('jk'),
-							'pass' => md5($this->input->post('pass')),
-							'tmt_aktif' => date('Y-m-d', strtotime($this->input->post('tmt_aktif'))));
-		
+							'tmt_aktif' => date('Y-m-d', strtotime($this->input->post('tmt_aktif'))),
+							'tmt_nonaktif' => date('Y-m-d', strtotime($this->input->post('tmt_nonaktif'))));
+			if ( $this->input->post('pass') != '' )
+			{ $person['pass'] = md5($this->input->post('pass')); }
 			$this->Anggota_model->update($id,$person);
 			
 			// set user message
@@ -300,6 +306,7 @@ class Anggota extends CI_Controller {
 		$this->form_data->jk = '';
 		//$this->form_data->tgl_lahir = '';
 		$this->form_data->tmt_aktif = '';
+		$this->form_data->tmt_nonaktif = '';
 	}
 	
 	// validation rules
@@ -308,7 +315,7 @@ class Anggota extends CI_Controller {
 		$this->form_validation->set_rules('nama', 'Name', 'trim|required');
 		$this->form_validation->set_rules('jk', 'Gender', 'trim|required');
 		//$this->form_validation->set_rules('tgl_lahir', 'DoB', 'trim|required|callback_valid_date');
-		$this->form_validation->set_rules('tmt_aktif', 'DoB', 'trim|required|callback_valid_date');
+		//$this->form_validation->set_rules('tmt_aktif', 'DoB', 'trim|required|callback_valid_date');
 		$this->form_validation->set_message('required', '* required');
 		$this->form_validation->set_message('isset', '* required');
 		$this->form_validation->set_message('valid_date', 'date format is not valid. dd-mm-yyyy');
