@@ -15,7 +15,7 @@
 
 <?php
 // tgl transaksi default setiap tgl 5
-$tgl_default = "05-06-2013";
+$tgl_default = "05-07-2013";
 ?>
 </head>
 <body>
@@ -230,7 +230,7 @@ $tgl_default = "05-06-2013";
 		<div class="modalTitle">Buat Murabahah Baru</div>
 		<div class="modalBody" >
 		<form id="formAddTrans" autocomplete="off" method="post" action="<?php if ( isset($action) ) echo $action;?>">
-			Nama Murabahah <br />
+			Nama Barang <br />
 			<input type="text" class="text" name="ket" value="<?php echo $person->nama; ?>">
 			<br />Nilai (Rp.) <br />
 			<input type="text" class="text" name="nilai" value="">

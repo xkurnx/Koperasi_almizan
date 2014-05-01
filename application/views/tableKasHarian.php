@@ -167,10 +167,17 @@ $j_pengeluaran += $result->pengeluaran;
 	<li>Proses Tutup Buku akan menghasilkan file backup (ZIP), mohon simpan file tersebut di tempat yang aman</li>
 	<li>Proses Tutup Buku akan mengirim/mengupload data ke website koperasi almizan</li>
 	</ul>
+	Catatan Bulan Lalu 
+	<?php
+	echo $catatan_bulan_lalu;
+	?>
 	<form method="post" action="<?php echo $action;?>">
 	<input type="hidden" name="jenis_trans" value="tutup_buku">
 	<input type="hidden" name="periode" value="<?php echo $periode;?>">
 	<input type="hidden" name="nilai" value="<?php echo $j_kas;?>">
+	Catatan Tutup Buku<br />
+	<textarea name="catatan" rows="5" cols="60"></textarea> 
+	<br />
 	<input type="submit" name="btnSubmit" value="Klik untuk Proses Tutup Buku periode <?php echo $periode_text;?>">
 	</form>
 	<?php

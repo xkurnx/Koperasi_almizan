@@ -3,6 +3,10 @@ class Laporan_model extends CI_Model {
 	
 	private $tbl_simpan = 't_simpan';
 	private $tbl_pinjam = 't_pinjam';
+	private $saldo_awal = '';
+	private $periode = '';
+	private $catatan_bulan_lalu = '';
+	private $catatan_bulan_ini = '';
 	
 	function __construct(){
 		parent::__construct();
@@ -11,6 +15,10 @@ class Laporan_model extends CI_Model {
 	function list_all(){
 		$this->db->order_by('id','asc');
 		return $this->db->get($tbl_person);
+	}
+	
+	function set_periode($periode){
+		$this->periode = $periode ;
 	}
 	
 	function count_all(){
@@ -27,29 +35,46 @@ class Laporan_model extends CI_Model {
 		return $data;		 
 	 }
 	 
-	 function get_saldo_awal($periode){
-		$periode_lalu = "201212";
-		$sql ="/* Saldo Awal */
-				select SUM(IFNULL(nilai,0)) nilai
-				from d_saldoakhir
-				where periode=DATE_FORMAT(DATE_ADD(STR_TO_DATE('".$periode."01','%Y%m%d'), INTERVAL -1 MONTH),'%Y%m') ";
-		#echo $sql;
+	 function get_tutup_buku(){
+		$sql ="select s1.periode,s1.catatan catatan1,IFNULL(s1.nilai,0) saldo_awal,
+				s2.nilai saldo_akhir,s2.catatan catatan2
+				from d_saldoakhir s1
+				left outer join (
+				/* saldo akhir */
+				select DATE_FORMAT(DATE_ADD(STR_TO_DATE('20130601','%Y%m%d'), INTERVAL -1 MONTH),'%Y%m') periode_lalu,
+				catatan, nilai 
+				from d_saldoakhir 
+				where periode='201306'
+				) s2 
+				on s1.periode = s2.periode_lalu
+				where s1.periode=DATE_FORMAT(DATE_ADD(STR_TO_DATE('20130601','%Y%m%d'), INTERVAL -1 MONTH),'%Y%m')
+				";
+		#echo "<pre>$sql</pre>";		
 		$data = $this->db->query($sql)->result();
-		return $data[0]->nilai;		
+		$this->saldo_awal = $data[0]->saldo_awal;
+		$this->saldo_akhir = $data[0]->saldo_akhir;				
+	#	$this->catatan_bulan_lalu = $data[0]->catatan1;	
+	#	$this->catatan_bulan_ini = $data[0]->catatan2;
+		#echo $this->catatan_bulan_lalu;		
+	}
+		
+	function get_saldo_awal(){
+		
 	}
 	
 	function get_saldo_akhir($periode){
 		$sql ="/* Saldo Awal */
 				select SUM(IFNULL(nilai,0)) nilai
 				from d_saldoakhir
-				where periode='$periode'";
+				where periode='$this->periode'";
 		#echo $sql;
 		$data = $this->db->query($sql)->result();
 		return $data[0]->nilai;		
 	}
 				
 	 
-	 function buka_kas_harian($periode){
+	 function buka_kas_harian(){
+		$periode = $this->periode;
 		$tgl_satu = "01-".substr($periode,-2)."-".substr($periode,0,4);
 		$sql = "select 
 				jenis,
@@ -251,7 +276,8 @@ class Laporan_model extends CI_Model {
 		return $data;		
 		}	
 		
-		function get_nunggak($periode){
+		function get_nunggak(){
+			$periode = $this->periode;
 			$sql = "select COALESCE(last_angsur,'4/10/20'),m.id_mrbh,m.id_anggota,tahun,ket,jual,jgk,tgl_pencairan, angsuran_ke,last_angsur,urut_mrbh,diangsur,
 					case 
 					when (date_format(last_angsur,'%Y%m') < '$periode'  or last_angsur is null  ) then 'red'
@@ -266,7 +292,7 @@ class Laporan_model extends CI_Model {
 									) as a 
                   on a.id_mrbh=m.id_mrbh 
 					where 1=1
-					and diangsur<jual";
+					and diangsur + 5 < jual -- toleransi 5 rupiah";
 		$data = $this->db->query($sql);
 		return $data;
 		}

@@ -39,12 +39,19 @@ class Laporan extends CI_Controller {
 		$data_table['periode_text'] = $this->kur_functions->periode_to_text($periode);
 		$data_table['base_url'] = site_url('laporan/transaksi_harian');
 		#echo $periode;
-		$data_table['saldo_awal'] = $this->Laporan_model->get_saldo_awal($periode);
-		$data_table['saldo_akhir'] = $this->Laporan_model->get_saldo_akhir($periode);
-		$data_table['trans'] = $this->Laporan_model->buka_kas_harian($periode)->result();
+		
+		// ambil data tutup buku 
+		$this->Laporan_model->set_periode($periode);
+		$data_table['saldo_awal'] = $this->Laporan_model->get_saldo_awal();
+		$this->Laporan_model->get_tutup_buku();
+		$data_table['catatan_bulan_lalu'] = $this->Laporan_model->catatan_bulan_lalu;
+		$data_table['saldo_akhir'] = $this->Laporan_model->saldo_akhir;
+		
+		
+		$data_table['trans'] = $this->Laporan_model->buka_kas_harian()->result();
 		
 		// ambil data yg nunggak 
-		$data_table['nunggak'] = $this->Laporan_model->get_nunggak($periode)->result();
+		$data_table['nunggak'] = $this->Laporan_model->get_nunggak()->result();
 		
 		$data['title'] = "Buku Kas Harian ".$this->kur_functions->periode_to_text($periode);
 		$data['name_login'] = $this->session->userdata('kop_sess_username');
