@@ -296,14 +296,14 @@ class Keuangan_model extends CI_Model {
 				and nilai > 0
 				and DATE_FORMAT(TGL_TRANS,'%Y%m')='$periode'
 				and nilai < 1000000";
-		#$this->db->query($sql);	
-		
+		$this->db->query($sql);	
+		#echo "<pre>$sql</pre>";
 		$sql = "delete from d_angsuran
 				where  nilai > 0
 				and DATE_FORMAT(TGL_TRANS,'%Y%m')='$periode'
 				and nilai < 1000000";
-		#$this->db->query($sql);
-		
+		$this->db->query($sql);
+		#echo "<pre>$sql</pre>";
 	// 	2. insert into d_simpanan from bulan_lalu where nilai > 0 and kode in ('SW','SK') 
 		$sql = "insert into d_simpanan(id_anggota,nilai,kode_simpanan,ket,tgl_trans,tgl_input,ip)
 				select id_anggota,nilai,kode_simpanan,ket,DATE_ADD(TGL_TRANS,interval 1 month),tgl_input,'server' from d_simpanan 
@@ -311,22 +311,24 @@ class Keuangan_model extends CI_Model {
 								and nilai > 0
 								and nilai < 1000000
 						and DATE_FORMAT(DATE_ADD(TGL_TRANS,interval 1 month),'%Y%m')='$periode'";
-		#$this->db->query($sql);	
-	
-	//  3. insert angsuran bulan lalu
+		$this->db->query($sql);	
+		#echo "<pre>$sql</pre>";
+	//  3. insert angsuran default
 		$sql = "insert into d_angsuran(id_mrbh,kategori,nilai,denda,tgl_trans,tgl_input,operator,ket,ip)
-				select m.id_mrbh,'MRBH',nilai,denda,DATE_ADD(TGL_TRANS,interval 1 month),now(),
-				'138',concat('Angsuran ke ',angsuran_ke+1),'server' ip from d_angsuran m 
-				left outer join (
-					  select id_mrbh,sum(nilai) diangsur,max(tgl_trans) last_angsur,sum(case when ket not like '%migrasi%'then 1 else 0 end ) angsuran_ke 
-									from d_angsuran
-									where 1=1     
-									group by id_mrbh
-						) as a 
-					on a.id_mrbh=m.id_mrbh  
-					where 1=1       
-					and DATE_FORMAT(DATE_ADD(TGL_TRANS,interval 1 month),'%Y%m')='$periode'";
-		#$this->db->query($sql);
+				select m.id_mrbh,'MRBH',jual/jgk nilai,0 denda,STR_TO_DATE('".$periode."01','%Y%m%d'),now(),
+				'138',concat('Angsuran ke ',init_angsuran_ke+angsuran_ke+1),'server' ip
+				from m_murabahah  m
+								left outer join (
+								select id_mrbh,sum(nilai) diangsur,sum(case when ket not like '%migrasi%'then 1 else 0 end ) angsuran_ke 
+												from d_angsuran
+												where 1=1
+											group by id_mrbh
+								) as a on a.id_mrbh=m.id_mrbh 
+						where 1=1
+					  -- and m.id_mrbh=27
+					   and a.diangsur + 10 < m.jual";
+		$this->db->query($sql);
+		#echo "<pre>$sql</pre>";
 	}	
 	
 	

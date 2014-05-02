@@ -291,6 +291,15 @@ class Trans extends CI_Controller {
 				redirect($this->agent->referrer(), 'location');	
 				break;	
 				
+			/****************************************************
+			PROSES COPY trans SIMPANAN / ANGSURAN dr BUlan lalu
+			*****************************************************/	
+			
+				case 'copy_trans_bulan_lalu':
+				$this->Keuangan_model->copy_trans_bulan_lalu($this->input->post('periode'));
+				redirect($this->agent->referrer(), 'location');	
+				break;	
+				
 		
 		}
 		
@@ -326,14 +335,7 @@ class Trans extends CI_Controller {
 				
 	}
 	
-	function copy_trans_bulan_lalu()
-	{
-		$this->kur_auth->is_logged_in();
-		$this->kur_auth->allowed(array(0));
-		$this->Keuangan_model->copy_trans_bulan_lalu($this->input->post('periode'));
-		
-		// de
-	}
+
 	
 }
 ?>
