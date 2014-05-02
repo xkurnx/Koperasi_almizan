@@ -25,7 +25,7 @@ class Laporan extends CI_Controller {
 		// offset
 		$this->kur_auth->is_logged_in();
 		$this->kur_auth->allowed(array(0));
-		$periode = '201306';
+		$periode = '201309';
 		$this->transaksi_harian($periode);	
 		
 	}
@@ -42,9 +42,10 @@ class Laporan extends CI_Controller {
 		
 		// ambil data tutup buku 
 		$this->Laporan_model->set_periode($periode);
-		$data_table['saldo_awal'] = $this->Laporan_model->get_saldo_awal();
 		$this->Laporan_model->get_tutup_buku();
 		$data_table['catatan_bulan_lalu'] = $this->Laporan_model->catatan_bulan_lalu;
+		$data_table['catatan_bulan_ini'] = $this->Laporan_model->catatan_bulan_ini;
+		$data_table['saldo_awal'] = $this->Laporan_model->saldo_awal;
 		$data_table['saldo_akhir'] = $this->Laporan_model->saldo_akhir;
 		
 		

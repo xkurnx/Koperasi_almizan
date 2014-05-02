@@ -143,20 +143,44 @@ $j_pengeluaran += $result->pengeluaran;
 
 </tbody>
 </table>
+
+<?php if ( $kas_masuk == 0 ) { ;?>
+<div class="boxGreen">
+Anda dapat menyalin data simpanan  (wajib, sukarela) periode sebelumnya dan juga mengisi otomatis cicilan yang seharusnya dibayarkan.
+<br /> selanjutnya silahkan hapus transaksi cicilan/simpanan secara manual bagi yang menunggak
+<ul>
+<li>Jika data simpanan dan angsuran periode berjalan belum diinputkan</li>
+<li>Jika data simpanan dan angsuran periode berjalan sudah diisi, maka akan dihapus dan diisi dengan data bulan lalu</li>
+</ul>
+
+<form method="post" action="<?php echo $action;?>">
+	<input type="hidden" name="jenis_trans" value="copy_trans_bulan_lalu">
+	<input type="hidden" name="periode" value="<?php echo $periode;?>">
+	<input type="submit" name="btnSubmit" value="Klik untuk menyalin data simpanan bulan lalu">
+	</form>
+</div>
+<?php } ?>
+
 <div class="boxGreen">
 	<span class="floatRight">Saldo Akhir Kas = <big>Rp.<?php echo number_format($j_kas);?></big></span>
 	<?php
 	if ($saldo_akhir != 0 ){
-	?>
-	<br />Periode ini sudah tutup buku dengan saldo akhir <big><?php echo number_format($saldo_akhir);?></big>	
+		?>
+		<br />Periode ini sudah tutup buku dengan saldo akhir <big><?php echo number_format($saldo_akhir);?></big>	
+		<?php
+		if ($saldo_akhir != $j_kas && $saldo_akhir != 0 ){
+		echo "<br /><span style='color:red'>Namun Saldo Akhir Kas saat ini (SUDAH) TIDAK SAMA dengan Saldo Akhir saat tutup buku sebelumnya, 
+		Penyebabnya kemungkinan ada transaksi setelah penutupan buku. Silahkan cek atau proses ulang</span>";
+		}
+		?>
+		<h4>Catatan Tutup Buku Bulan ini (catatan proses tutup buku sebelumnya)</h4>
+		<em><?php echo $catatan_bulan_ini; ?> </em>
+		<br /><br />		
 	<?php
 	}	
 	?>
 	
 	<?php
-	if ($saldo_akhir != $j_kas && $saldo_akhir != 0 ){
-		echo "<br />Namun Saldo Akhir Kas TIDAK SAMA dengan Saldo Akhir saat tutup buku, silahkan proses ulang";
-	}
 	if ( $saldo_akhir != $j_kas && $j_kas != $saldo_awal ) {
 	?>
 	<ul>
@@ -167,15 +191,16 @@ $j_pengeluaran += $result->pengeluaran;
 	<li>Proses Tutup Buku akan menghasilkan file backup (ZIP), mohon simpan file tersebut di tempat yang aman</li>
 	<li>Proses Tutup Buku akan mengirim/mengupload data ke website koperasi almizan</li>
 	</ul>
-	Catatan Bulan Lalu 
-	<?php
-	echo $catatan_bulan_lalu;
-	?>
+		
+	
+	<h4>Catatan Tutup Buku Bulan Lalu</h4>
+	<em><?php echo $catatan_bulan_lalu; ?> </em>
+	
 	<form method="post" action="<?php echo $action;?>">
 	<input type="hidden" name="jenis_trans" value="tutup_buku">
 	<input type="hidden" name="periode" value="<?php echo $periode;?>">
 	<input type="hidden" name="nilai" value="<?php echo $j_kas;?>">
-	Catatan Tutup Buku<br />
+	<br />Silahkan isi Catatan untuk Tutup Buku<br />
 	<textarea name="catatan" rows="5" cols="60"></textarea> 
 	<br />
 	<input type="submit" name="btnSubmit" value="Klik untuk Proses Tutup Buku periode <?php echo $periode_text;?>">
