@@ -3,10 +3,11 @@ class Laporan_model extends CI_Model {
 	
 	private $tbl_simpan = 't_simpan';
 	private $tbl_pinjam = 't_pinjam';
-	private $saldo_awal = '';
+	public $saldo_awal = 0;
+	public $saldo_akhir = 0;
 	private $periode = '';
-	private $catatan_bulan_lalu = '';
-	private $catatan_bulan_ini = '';
+	public $catatan_bulan_lalu = '';
+	public $catatan_bulan_ini = '';
 	
 	function __construct(){
 		parent::__construct();
@@ -36,25 +37,28 @@ class Laporan_model extends CI_Model {
 	 }
 	 
 	 function get_tutup_buku(){
-		$sql ="select s1.periode,s1.catatan catatan1,IFNULL(s1.nilai,0) saldo_awal,
-				s2.nilai saldo_akhir,s2.catatan catatan2
+		$sql ="select s1.periode,IFNULL(s1.catatan,'-') catatan1,IFNULL(s1.nilai,0) saldo_awal,
+				s2.nilai saldo_akhir,IFNULL(s2.catatan,'-') catatan2
 				from d_saldoakhir s1
 				left outer join (
 				/* saldo akhir */
-				select DATE_FORMAT(DATE_ADD(STR_TO_DATE('20130601','%Y%m%d'), INTERVAL -1 MONTH),'%Y%m') periode_lalu,
+				select DATE_FORMAT(DATE_ADD(STR_TO_DATE('".$this->periode."01','%Y%m%d'), INTERVAL -1 MONTH),'%Y%m') periode_lalu,
 				catatan, nilai 
 				from d_saldoakhir 
-				where periode='201306'
+				where periode='".$this->periode."'
 				) s2 
 				on s1.periode = s2.periode_lalu
-				where s1.periode=DATE_FORMAT(DATE_ADD(STR_TO_DATE('20130601','%Y%m%d'), INTERVAL -1 MONTH),'%Y%m')
+				where s1.periode=DATE_FORMAT(DATE_ADD(STR_TO_DATE('".$this->periode."01','%Y%m%d'), INTERVAL -1 MONTH),'%Y%m')
 				";
 		#echo "<pre>$sql</pre>";		
 		$data = $this->db->query($sql)->result();
-		$this->saldo_awal = $data[0]->saldo_awal;
-		$this->saldo_akhir = $data[0]->saldo_akhir;				
-	#	$this->catatan_bulan_lalu = $data[0]->catatan1;	
-	#	$this->catatan_bulan_ini = $data[0]->catatan2;
+		if ( isset($data[0]->saldo_awal) )
+		{	
+			$this->saldo_awal = $data[0]->saldo_awal;
+			$this->saldo_akhir = $data[0]->saldo_akhir;				
+			$this->catatan_bulan_lalu = $data[0]->catatan1;	
+			$this->catatan_bulan_ini = $data[0]->catatan2;
+		}
 		#echo $this->catatan_bulan_lalu;		
 	}
 		
