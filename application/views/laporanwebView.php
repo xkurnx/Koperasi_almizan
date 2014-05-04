@@ -14,15 +14,26 @@
 <div class="wrapper">
 	<?php require_once('header.html.php');?>
 	<div class="content">
-	<?php
-	//print_r($this->form_data);
-	?>
-		<h1><?php echo $title; ?></h1>
+	<h1><?php echo $title; ?></h1>
 		<span class="hide periode_hidden"><?php echo $periode;?></span>
+		
+		<ul class="menuSubLaporan">
+		<?php
+		preg_match("/laporan\/(?P<name>\w+)/",$base_url,$matches);	
+		$current_laporan = $matches[1];		
+		$sub_laporan = array ('Buku Kas Harian'=>'transaksi_harian','Rekap Simpanan ' => 'rekap_simpanan');	
+		foreach ( $sub_laporan as $key => $v ):	
+			if ( $current_laporan != $v ) { 
+				echo "<li><a href='".site_url('laporan/'.$v.'/'.$periode)."'>$key</a></li>";
+			}	
+		endforeach;
+		?>
+		</ul>	
 		<a class="xls excel" href="<?php echo $base_url.'/'.$periode.'/xls';?>">download sebagai excel</a><br /><br />
 		<div class="data">
 		<?php echo $html_table;?>		
-		</div>
+	</div>	
+	
 </div>	
 </body>
 </html>
