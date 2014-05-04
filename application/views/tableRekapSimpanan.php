@@ -84,7 +84,7 @@ $i++;
 <td class="alignRight"><?php echo number_format($result->SK_SAWAL);?></td>
 <td class="alignRight"><?php echo number_format($result->SK_M);?></td>
 <td class="alignRight"><?php echo number_format($result->SK_K);?></td>
-<td class="alignRight"><?php echo number_format($result->SK_SAKHIR);?></td>
+<td class="alignRight <?php echo ( $result->SK_SAKHIR < 0 ? "red":"" );?>"><?php echo number_format($result->SK_SAKHIR);?></td>
 
 </tr>
 <tr>
