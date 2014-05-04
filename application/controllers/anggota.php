@@ -3,14 +3,14 @@
 class Anggota extends CI_Controller {
 
 	// num of records per page
-	private $limit = 10;
+	private $limit = 100;
 	
 	function __construct()
 	{
 		parent::__construct();
 		// load library
 		$this->load->library(array('table','form_validation','session','kur_functions'));
-		$this->limit = 20;
+		$this->limit = 100;
 		
 		// load helper
 		$this->load->helper('url');
@@ -196,7 +196,7 @@ class Anggota extends CI_Controller {
 		// set common properties
 		$data['title'] = 'Update person';
 		$data['action'] = site_url('anggota/updateAnggota');
-		$data['link_back'] = anchor('anggota/index/','Back to list of persons',array('class'=>'back'));
+		$data['link_back'] = anchor('anggota/index/','Kembali ke Daftar',array('class'=>'back'));
 		// save data
 		$id = $this->input->post('id');
 		// set empty default form field values

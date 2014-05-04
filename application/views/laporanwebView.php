@@ -19,7 +19,7 @@
 	?>
 		<h1><?php echo $title; ?></h1>
 		<span class="hide periode_hidden"><?php echo $periode;?></span>
-		<a class="excel" href="javascript:;">download sebagai excel</a><br /><br />
+		<a class="xls excel" href="<?php echo $base_url.'/'.$periode.'/xls';?>">download sebagai excel</a><br /><br />
 		<div class="data">
 		<?php echo $html_table;?>		
 		</div>

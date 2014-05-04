@@ -306,7 +306,7 @@ class Keuangan_model extends CI_Model {
 		#echo "<pre>$sql</pre>";
 	// 	2. insert into d_simpanan from bulan_lalu where nilai > 0 and kode in ('SW','SK') 
 		$sql = "insert into d_simpanan(id_anggota,nilai,kode_simpanan,ket,tgl_trans,tgl_input,ip)
-				select id_anggota,nilai,kode_simpanan,ket,DATE_ADD(TGL_TRANS,interval 1 month),tgl_input,'server' from d_simpanan 
+				select id_anggota,nilai,kode_simpanan,ket,DATE_ADD(TGL_TRANS,interval 1 month),now(),'server' from d_simpanan 
 								where kode_simpanan in ('SW','SK') 
 								and nilai > 0
 								and nilai < 1000000

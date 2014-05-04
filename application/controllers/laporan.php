@@ -30,7 +30,7 @@ class Laporan extends CI_Controller {
 		
 	}
 	
-	function transaksi_harian($periode){
+	function transaksi_harian($periode,$view = 'web'){
 		$this->kur_auth->is_logged_in();
 		$this->kur_auth->allowed(array(0));
 		
@@ -56,14 +56,26 @@ class Laporan extends CI_Controller {
 		
 		$data['title'] = "Buku Kas Harian ".$this->kur_functions->periode_to_text($periode);
 		$data['name_login'] = $this->session->userdata('kop_sess_username');
+		$data_table['view'] = $view; // XLS or WEB
+		
 		// load view
 		$html_table = $this->load->view('tableKasHarian', $data_table,true);
 		$data['role_user'] = $this->session->userdata('kop_sess_role');		
 		$data['html_table'] = $html_table;
-		$this->load->view('laporanView', $data);	
+		
+		switch ($view){
+			case "web":
+				$this->load->view('laporanWebView', $data);	
+			break;
+		case "xls":
+				$data_table['periode_text'] = $data_table['periode_text'];
+				$this->load->view('laporanXLSView', $data);	
+			break;
+		}	
+		
 	}
 	
-	function rekap_simpanan($periode){
+	function rekap_simpanan($periode,$view = 'web'){
 		$this->kur_auth->is_logged_in();
 		$this->kur_auth->allowed(array(0));
 		
@@ -74,7 +86,7 @@ class Laporan extends CI_Controller {
 		$data_table['periode'] = $periode;
 		$data_table['action'] = site_url('trans/add');
 		$data_table['periode_text'] = $this->kur_functions->periode_to_text($periode);
-		$data_table['base_url'] = site_url('laporan/transaksi_harian');
+		$data_table['base_url'] = site_url('laporan/rekap_simpanan');
 		
 		$data_table['rekap'] = $this->Laporan_model->rekap_simpanan_by_bulan($periode)->result();
 		
@@ -83,7 +95,19 @@ class Laporan extends CI_Controller {
 		$html_table = $this->load->view('tableRekapSimpanan', $data_table,true);
 		$data['role_user'] = $this->session->userdata('kop_sess_role');		
 		$data['html_table'] = $html_table;
-		$this->load->view('laporanView', $data);	
+		
+		
+		switch ($view){
+			case "web":
+				$this->load->view('laporanWebView', $data);	
+			break;
+		case "xls":
+				$data['periode_text'] = $data_table['periode_text'];
+				$this->load->view('laporanXLSView', $data);	
+			break;
+		}	
+		
+		
 	}
 	
 	
