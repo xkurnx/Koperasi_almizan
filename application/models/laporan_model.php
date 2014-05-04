@@ -242,7 +242,7 @@ class Laporan_model extends CI_Model {
 						group by id_anggota
 						order by id_anggota asc
 					) s_simpanan
-					on m_anggota.id_anggota = s_simpanan.id_anggota ";		
+					on m_anggota.id_anggota = s_simpanan.id_anggota 					";		
 			$data = $this->db->query($sql);
 			return $data;
 		}
@@ -274,6 +274,7 @@ class Laporan_model extends CI_Model {
 				) t_simpanan
 				on m_anggota.id_anggota=t_simpanan.id_anggota
 				where tmt_aktif <= STR_TO_DATE('$periode"."28"."', '%Y%m%d') 
+				order by nama asc
 				";
 		#echo "<pre>$sql</pre>";
 		$data = $this->db->query($sql);
