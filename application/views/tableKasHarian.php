@@ -28,7 +28,7 @@ $tahun = substr($periode,0,4);
 <tr>
 <th>No</th>
 <th>KD</th>
-<th>Tgl</th>
+<th  width="60">Tgl</th>
 <th width="170">Transaksi</th>
 <th>Simp Wjb</th>
 <th>Simp SKRL</th>
@@ -144,25 +144,25 @@ $j_pengeluaran += $result->pengeluaran;
 </tbody>
 </table>
 
-<?php if ( $kas_masuk == 0 ) { ;?>
+<?php if ( $j_kas_masuk == 0 ) { ;?>
 <div class="boxGreen">
 Anda dapat menyalin data simpanan  (wajib, sukarela) periode sebelumnya dan juga mengisi otomatis cicilan yang seharusnya dibayarkan.
-<br /> selanjutnya silahkan hapus transaksi cicilan/simpanan secara manual bagi yang menunggak
 <ul>
-<li>Jika data simpanan dan angsuran periode berjalan belum diinputkan</li>
+<li>selanjutnya silahkan hapus transaksi cicilan/simpanan secara manual bagi yang menunggak</li>
 <li>Jika data simpanan dan angsuran periode berjalan sudah diisi, maka akan dihapus dan diisi dengan data bulan lalu</li>
 </ul>
 
 <form method="post" action="<?php echo $action;?>">
 	<input type="hidden" name="jenis_trans" value="copy_trans_bulan_lalu">
 	<input type="hidden" name="periode" value="<?php echo $periode;?>">
-	<input type="submit" name="btnSubmit" value="Klik untuk menyalin data simpanan bulan lalu">
+	<input type="submit" name="btnSubmit" value="Klik untuk menyalin data simpanan bulan lalu dan mengisi cicilan">
 	</form>
 </div>
 <?php } ?>
 
 <div class="boxGreen">
 	<span class="floatRight">Saldo Akhir Kas = <big>Rp.<?php echo number_format($j_kas);?></big></span>
+	<br /><a href="<?php echo site_url('db/backup');?>">download file backup (zip)</a>
 	<?php
 	if ($saldo_akhir != 0 ){
 		?>
@@ -174,7 +174,7 @@ Anda dapat menyalin data simpanan  (wajib, sukarela) periode sebelumnya dan juga
 		}
 		?>
 		<h4>Catatan Tutup Buku Bulan ini (catatan proses tutup buku sebelumnya)</h4>
-		<em><?php echo $catatan_bulan_ini; ?> </em>
+		<em><?php echo nl2br($catatan_bulan_ini); ?> </em>
 		<br /><br />		
 	<?php
 	}	
@@ -194,14 +194,14 @@ Anda dapat menyalin data simpanan  (wajib, sukarela) periode sebelumnya dan juga
 		
 	
 	<h4>Catatan Tutup Buku Bulan Lalu</h4>
-	<em><?php echo $catatan_bulan_lalu; ?> </em>
+	<em><?php echo nl2br($catatan_bulan_lalu); ?> </em>
 	
 	<form method="post" action="<?php echo $action;?>">
 	<input type="hidden" name="jenis_trans" value="tutup_buku">
 	<input type="hidden" name="periode" value="<?php echo $periode;?>">
 	<input type="hidden" name="nilai" value="<?php echo $j_kas;?>">
 	<br />Silahkan isi Catatan untuk Tutup Buku<br />
-	<textarea name="catatan" rows="5" cols="60"></textarea> 
+	<textarea name="catatan" rows="5" cols="60"><?php echo $catatan_bulan_ini; ?></textarea> 
 	<br />
 	<input type="submit" name="btnSubmit" value="Klik untuk Proses Tutup Buku periode <?php echo $periode_text;?>">
 	</form>
