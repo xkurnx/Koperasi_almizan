@@ -67,6 +67,26 @@ $(document).ready(function(){
 			$('#modalAddBerek input[name=kode_berek]').val(kode_berek);
 		}
 		
+		$('#modalAddMurabahah input[name=jgk]').blur(function() {
+			jgk = $('#modalAddMurabahah input[name=jgk]').val();
+			nilai = $('#modalAddMurabahah input[name=nilai]').val();
+			margin = 15;
+				if ( jgk > 12 && jgk <= 24 ){
+					margin = 20;
+				}
+				
+				if ( jgk > 24 && jgk <= 36 ){
+					margin = 25;
+				}
+				
+			jual = nilai * ( ( 100 + margin ) / 100 );
+			cicilan = jual / jgk ;	
+			$('#modalAddMurabahah input[name=jual]').val(jual);
+			$('#modalAddMurabahah input[name=cicilan]').val(cicilan);	
+			$('#modalAddMurabahah input[name=margin]').val(margin);			
+			
+		})
+		
 		add_murabahah=function (kode_berek){
 			//$('.text').val('');
 			$('#modalAddMurabahah input[name=ket]').focus();

@@ -136,9 +136,8 @@ div.infoValidasi{
 	font-size:12px;
 }
 div.content {
-	width:1000px;
 	background:#fff;
-	padding:10px 30px;
+	padding:10px;
 }
 div.content h1 {
 	font-size:14px;
@@ -151,7 +150,6 @@ div.content h1 {
 div.content div.data table {
 	border:2px solid #000;
 	background:#fff;
-	width:1000px;
 }
 
 
@@ -211,11 +209,12 @@ div.success {
 	color:#060;
 }
 
-a.update, a.delete, a.add, a.view, a.back {
+a.update, a.delete, a.add, a.view, a.back,a.xls,a.zip {
 	font-size: 9pt;
 	color:#900;
 	font-wight:bold;
 	padding-left:20px;
+	padding:2px 20px;
 	text-decoration: none;
 }
 a.update {
@@ -237,6 +236,15 @@ a.view {
 a.back {
 	background:url(images/prev.gif) left center no-repeat;
 }
+
+a.xls{
+	background:url(../i/icon_xls_small.gif) left center no-repeat;	
+}
+
+a.zip{
+	background:url(../i/zipOne.png) left center no-repeat;	
+}
+
 a.update:hover, a.delete:hover, a.add:hover, a.view:hover {
 	color:#000;
 }
@@ -360,6 +368,19 @@ div.content div.data table.small .head{
 .boxGreen{ background:#d9efbe }
 
 .contentSource{display:none}
+
+
+ul.menuSubLaporan{
+	display:block;
+	font-size:12px;
+}
+
+ul.menuSubLaporan li{
+	float:left;
+	margin-right:30px;
+	padding:0px;
+	margin-bottom:10px;
+}
 
 ul.tabBulanan{
 	margin:0px;
