@@ -170,9 +170,13 @@ class Anggota extends CI_Controller {
 		
 		// prefill form values
 		$person = $this->Anggota_model->get_by_id($id)->row();
+		
+		#echo date('d-m-Y',strtotime('2037-12-30'));  // return 30-12-2037
+		#echo date('d-m-Y',strtotime('2038-12-30'));  // return ?? 
+		
 		$this->form_data->id_anggota = $id;
-		$this->form_data->tmt_aktif = $person->tmt_aktif;
-		$this->form_data->tmt_nonaktif = $person->tmt_nonaktif;
+		$this->form_data->tmt_aktif = date('d-m-Y',strtotime($person->tmt_aktif));
+		$this->form_data->tmt_nonaktif = date('d-m-Y',strtotime($person->tmt_nonaktif));
 		$this->form_data->nama = $person->nama;
 		$this->form_data->jk = strtoupper($person->jk);
 		$this->form_data->tgl_lahir = date('d-m-Y',strtotime($person->tgl_lahir));
@@ -214,11 +218,14 @@ class Anggota extends CI_Controller {
 			$person = array('nama' => $this->input->post('nama'),
 							'jk' => $this->input->post('jk'),
 							'tmt_aktif' => date('Y-m-d', strtotime($this->input->post('tmt_aktif'))),
-							'tmt_nonaktif' => date('Y-m-d', strtotime($this->input->post('tmt_nonaktif'))));
+							'tmt_nonaktif' => date('Y-m-d', strtotime($this->input->post('tmt_nonaktif')))
+							);
 			if ( $this->input->post('pass') != '' )
 			{ $person['pass'] = md5($this->input->post('pass')); }
-			$this->Anggota_model->update($id,$person);
 			
+			if ( $this->input->post('tmt_nonaktif') == '' )
+			{ $person['tmt_nonaktif'] = '2037-12-12';} 			
+			$this->Anggota_model->update($id,$person);
 			// set user message
 			$data['message'] = '<div class="success">Data Anggota Berhasil diUbah</div>';
 		}
