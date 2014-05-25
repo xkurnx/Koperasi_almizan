@@ -17,6 +17,7 @@
 	<h1><?php echo $title; ?></h1>
 		<span class="hide periode_hidden"><?php echo $periode;?></span>
 		
+		Laporan Lainnya
 		<ul class="menuSubLaporan">
 		<?php
 		preg_match("/laporan\/(?P<name>\w+)/",$base_url,$matches);	
@@ -26,10 +27,18 @@
 			if ( $current_laporan != $v ) { 
 				echo "<li><a href='".site_url('laporan/'.$v.'/'.$periode)."'>$key</a></li>";
 			}	
+		endforeach;		
+		
+		$current_tahun = substr($periode,0,4);
+		$tahun_laporan = array ('2013','2014');	
+		foreach ( $tahun_laporan as $v ):	
+			if ( $current_tahun != $v ) { 
+				echo "<li><a href='".$base_url.'/'.$v."01'>Lihat Tahun $v</a></li>";
+			}	
 		endforeach;
 		?>
-		</ul>	
-		<a class="xls excel" href="<?php echo $base_url.'/'.$periode.'/xls';?>">download sebagai excel</a><br /><br />
+		
+		</ul>			
 		<div class="data">
 		<?php echo $html_table;?>		
 	</div>	
