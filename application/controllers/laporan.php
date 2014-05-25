@@ -25,7 +25,7 @@ class Laporan extends CI_Controller {
 		// offset
 		$this->kur_auth->is_logged_in();
 		$this->kur_auth->allowed(array(0));
-		$periode = '201309';
+		$periode = date('Ym');
 		$this->transaksi_harian($periode);	
 		
 	}
@@ -57,9 +57,10 @@ class Laporan extends CI_Controller {
 		$data['title'] = "Buku Kas Harian ".$this->kur_functions->periode_to_text($periode);
 		$data['name_login'] = $this->session->userdata('kop_sess_username');
 		$data_table['view'] = $view; // XLS or WEB
-		
 		// load view
 		$html_table = $this->load->view('tableKasHarian', $data_table,true);
+		
+		
 		$data['role_user'] = $this->session->userdata('kop_sess_role');		
 		$data['html_table'] = $html_table;
 		
@@ -89,9 +90,9 @@ class Laporan extends CI_Controller {
 		$data_table['base_url'] = site_url('laporan/rekap_simpanan');
 		
 		$data_table['rekap'] = $this->Laporan_model->rekap_simpanan_by_bulan($periode)->result();
-		
-		#print_r($data_table['trans']);
+		$data_table['view'] = $view; // XLS or WEB
 		// load view
+		
 		$html_table = $this->load->view('tableRekapSimpanan', $data_table,true);
 		$data['role_user'] = $this->session->userdata('kop_sess_role');		
 		$data['html_table'] = $html_table;
