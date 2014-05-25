@@ -273,7 +273,8 @@ class Laporan_model extends CI_Model {
 				group by id_anggota
 				) t_simpanan
 				on m_anggota.id_anggota=t_simpanan.id_anggota
-				where tmt_aktif <= STR_TO_DATE('$periode"."28"."', '%Y%m%d') 
+				where tmt_aktif <= STR_TO_DATE('$periode"."28"."', '%Y%m%d')	/* munculkan hanya tmt <= periode berjalan */	
+				and DATE_ADD(COALESCE(tmt_nonaktif,STR_TO_DATE('20201231', '%Y%m%d')),INTERVAL 1 MONTH) >= STR_TO_DATE('$periode"."28"."', '%Y%m%d')  /* sembunyikan yg udah non aktif  */	
 				order by nama asc
 				";
 		#echo "<pre>$sql</pre>";
