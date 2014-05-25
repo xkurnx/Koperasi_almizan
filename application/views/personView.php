@@ -234,11 +234,16 @@ $tgl_default = "05-11-2013";
 			<input type="text" class="text" name="ket" value="<?php echo $person->nama; ?>">
 			<br />Harga Pokok (Rp.) <br />
 			<input type="text" class="text" name="nilai" value="">
+			<br />Jangka Waktu (max. 60 Bulan)<br />
+			<input type="text" style="width:30px" class="text" name="jgk" value="">
+			<br />Margin (otomatis)<br />
+			<input type="text" style="width:30px" class="text" name="margin" value="">% 
+			<br />Harga Jual (Rp.) <br />
+			<input type="text" class="text" name="jual" value="">
+			<br />Cicilan per bulan (otomatis)<br />
+			<input type="text" class="text" name="cicilan" value="">
 			<br />Adm (Rp.) <br />
 			<input type="text" class="text" name="biaya_adm" value="">
-			<br />Jangka Waktu (max. 60 Bulan)<br />
-			<input type="text" class="text" name="jgk" value="">
-			</select>
 			<br />Tgl Pembelian Barang <br />
 			<input type="text" value="" class="text tgl_trans" name="tgl_trans_murabahah"><a onclick="displayDatePicker('tgl_trans_murabahah');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
 			<input type="hidden" name="jenis_trans" value="create_murabahah">

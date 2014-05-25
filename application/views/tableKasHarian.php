@@ -157,6 +157,7 @@ Anda dapat menyalin data simpanan  (wajib, sukarela) periode sebelumnya dan juga
 <div class="boxGreen">
 	<span class="floatRight">Saldo Akhir Kas = <big>Rp.<?php echo number_format($j_kas);?></big></span>
 	<br /><a class="zip" href="<?php echo site_url('db/backup');?>">download file backup (zip)</a>
+	<a class="xls excel" href="<?php echo site_url('laporan/buku_kas_harian/'.$periode.'/xls');?>">download sebagai excel</a><br /><br />
 	<?php
 	if ($saldo_akhir != 0 ){
 		?>

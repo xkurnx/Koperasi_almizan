@@ -1,15 +1,6 @@
 <?php
 
-#print_r($datakas);
-/*
-foreach ($datakas as $result)
-{
-	$this->table->add_row(++$i,$result->jenis,$result->tgl,$result->nama,$result->SW,$result->SP,$result->pokok_pinj,
-	$result->laba_pinj,$result->jasa_rk,$result->jasa_bl,$result->denda,$result->pengeluaran);
-}
-*/
-	
-
+if ( $view == 'web' ) {
 $arrayBulan = array ('01'=>'Januari','02'=>'Pebruari','03'=>'Maret','04'=>'April','05'=>'Mei','06'=>'Juni',
 '06'=>'Juni','07'=>'Juli','08'=>'Agustus','09'=>'September','10'=>'Oktober','11'=>'Nopember','12'=>'Desember');	
 $bulan = substr($periode,-2);
@@ -22,26 +13,26 @@ $tahun = substr($periode,0,4);
 	}
 	?>	
 </ul>
-
-<table class="report" cellspacing="0" cellpadding="4" border="0">
+<?php } ?>
+<table class="report" cellspacing="0" cellpadding="4" border="<?php echo ( $view == 'web' ) ? 0:1;?>">
 <thead>
 <tr>
 <th>No</th>
 <th width="170">Nama Anggota</th>
-<th>S.AWAL SP</th>
+<th>S.AWAL <br />Sp.Pokok</th>
 <th>MASUK SP</th>
 <th>KELUAR SP</th>
-<th>S.AKHIR SP</th>
+<th>S.AKHIR <br />Sp.Pokok</th>
 
-<th>S.AWAL SW</th>
+<th>S.AWAL <br />Sp.Wajib</th>
 <th>MASUK SW</th>
 <th>KELUAR SW</th>
-<th>S.AKHIR SW</th>
+<th>S.AKHIR <br />Sp.Wajib</th>
 
-<th>S.AWAL SK</th>
+<th>S.AWAL <br />Sp.Sukarela</th>
 <th>MASUK SK</th>
 <th>KELUAR SK</th>
-<th>S.AKHIR SK</th>
+<th>S.AKHIR <br />Sp.Sukarela</th>
 </tr>
 </thead>
 <tbody>
@@ -87,7 +78,6 @@ $i++;
 <td class="alignRight <?php echo ( $result->SK_SAKHIR < 0 ? "red":"" );?>"><?php echo number_format($result->SK_SAKHIR);?></td>
 
 </tr>
-<tr>
 <?php
 
 // jumlahkan
@@ -129,3 +119,9 @@ $j_SK_AKHIR += $result->SK_SAKHIR;
 
 </tbody>
 </table>
+
+<!-- IF only on WEB View -->
+<?php if ( $view == 'web' ) { ?>
+<a class="xls excel" href="<?php echo site_url('laporan/rekap_simpanan/'.$periode.'/xls'); ?>">download sebagai excel</a><br /><br />
+<?php } ?>
+	
