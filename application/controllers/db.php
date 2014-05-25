@@ -14,6 +14,7 @@ class Db extends CI_Controller {
 		
 		// load helper
 		$this->load->helper('url');
+		$this->load->helper('file');
 		
 		// load model
 		$this->load->model('Anggota_model','',TRUE);
@@ -30,12 +31,15 @@ class Db extends CI_Controller {
 		echo "backup";
 	}
 	
-	function backup(){
+	function backup($type = "download" ){
 		$this->load->helper('download');
 		$tanggal=date('Ymd');
 		$namaFile= 'db_koperasi_' . $tanggal . '.sql.zip';
 		$this->load->dbutil();
 		
+		$local_directory = './downloads/';
+		$local_file = $local_directory.$namaFile;
+				
 		$prefs = array(
                 'format'      => 'zip',
 				'filename'    => 'dbAppKopAlmizan.sql',    // File name - NEEDED ONLY WITH ZIP FILES
@@ -45,7 +49,42 @@ class Db extends CI_Controller {
               );
 
 		$backup = $this->dbutil->backup($prefs); 
-		force_download($namaFile, $backup);
+		if ( $type == 'download' )
+		{ 
+			force_download($namaFile, $backup); 
+			exit;
+		}
+		// tulis ke local server, untuk nantinya diupload ke remote server
+		else{
+			if ( ! write_file($local_file, $backup))
+			{
+				 echo 'Unable to write the file';
+			}
+			else
+			{ // kirim ke remote server http://kprialmizan.pa-kisaran.net/app
+				
+				//Initialise the cURL var
+				$ch = curl_init();
+
+				//Get the response from cURL
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+				//Set the Url
+				curl_setopt($ch, CURLOPT_URL, 'http://pemula.dev/koperasi/index.php/db/do_restore');
+				//Create a POST array with the file in it
+				$postData = array(
+					'userfile' => "@".$_SERVER['SCRIPT_FILENAME']."/.".$local_file,
+					'pwd' => 'almizan2014',
+				);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+				// Execute the request
+				$response = curl_exec($ch);
+				echo $response;
+							
+			}		
+		}	
+		
+		
 	}
 	
 	function restore(){
@@ -56,9 +95,10 @@ class Db extends CI_Controller {
 	
 	function do_restore(){
 		$name=time();
+		print_r($_FILES['userfile']);
 		$config['upload_path'] = './uploads/';
-		$config['allowed_types'] = 'zip|rar';
-		if ( !$this->input->post('pwd') != 'almizan2014' )
+		$config['allowed_types'] = '*';
+		if ( $this->input->post('pwd') != 'almizan2014' )
 		{
 			exit('Access Denied');
 		}
@@ -68,7 +108,6 @@ class Db extends CI_Controller {
 		if ( ! $this->upload->do_upload())
 		{
 			$error = array('error' => $this->upload->display_errors());
-
 			$this->load->view('upload_sql', $error);
 		}
 		else
@@ -76,10 +115,7 @@ class Db extends CI_Controller {
 			$data = array('upload_data' => $this->upload->data());
 			// Optional: Only take out these files, anything else is ignored
 			$this->unzip->allow(array('sql', 'js', 'png', 'gif', 'jpeg', 'jpg', 'tpl', 'html', 'swf'));
-			#echo $data['upload_data']['full_path'];
 			$extracted = $this->unzip->extract($data['upload_data']['full_path']) ;
-			
-			$this->load->helper('file');
 			$query = utf8_decode (read_file($extracted [0] ));
 			$sqls = explode(';', $query);
 				array_pop($sqls);
@@ -89,7 +125,7 @@ class Db extends CI_Controller {
 					$this->db->query($statement);
 					$this->db->query("SET FOREIGN_KEY_CHECKS = 1");
 				}
-				echo "done";
+				echo "file imported";
 		}
 		
 	}
