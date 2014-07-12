@@ -74,7 +74,7 @@ class Kur_auth{
     }
     
     function set_session(){
-      $this->role = 1 ; // on live, ADMIN(0) is not allowed
+     # $this->role = 1 ; // forced to 1 when live, since ADMIN(0) is not allowed
 	  $array = array(
 				$this->prefix."sess_userid"=>"$this->user_id",
 				$this->prefix."sess_username"=>"$this->user_name",
