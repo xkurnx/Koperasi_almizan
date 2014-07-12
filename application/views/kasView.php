@@ -22,8 +22,25 @@
 		 <li>Kas Keluar Masuk adalah semua Penerimaan Selain Simpanan, Angsuran, dan Denda</li>
 		 </ul>
 		 </div>
-		
+		 <!-- multipl form untuk kas keluar -->
+		 <form method="post" class="KasKeluarForm" action="<?php echo site_url('trans/multipleadd');?>">
+		 <table>
+		 <tr><td width="300">Transaksi Keluar</td><td>Nilai (Rp.)</td><td>Tgl. Trans</td><td></td></tr>
+		 <?php
+		 foreach ($recent_kas_keluar as $kas):
+		 ?>		 
+		 <tr><td><input type="text" class="nama_trans" name="nama_trans[]" value="<?php echo $kas->ket;?>"></td>
+		 <td><input type="text" class="nilai_trans" name="nilai_trans[]" value=""></td>
+		 <td><input type="text" class="tgl_trans" name="tgl_trans[]" value=""></td>
+		 <td><a class="btnDelRow" href="javascript:;">del</a></td></tr>
+		 <?php
+		 endforeach;
+		 ?>
+		 </table>
+		 <input type="submit" value="OK">
+		 </form>
 		<?php if ( isset($link_add) ) echo $link_add;?>
+		<div class="paging"><?php echo $pagination; ?></div>
 		<div class="data"><?php echo $table; ?></div>
 		<br />
 		<?php echo $link_back; ?>

@@ -1,0 +1,24 @@
+body {
+	background:none;
+}
+
+table td{
+	font-size:14px;
+}
+
+.wrapper{
+	width:auto;
+}
+div.content {width:auto}
+
+div.content h1{
+	border:0px;
+	background:none;
+}
+
+div.content div.data table{
+	border:none;
+	width:auto;
+}
+
+

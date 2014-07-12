@@ -25,14 +25,8 @@
 		<table>
 			<tr>
 				<td width="30%">Nomor Anggota</td>
-				<td><input type="text" name="id" disabled="disable" class="text" value="<?php echo set_value('id'); ?>"/></td>
-				<input type="hidden" name="id" value="<?php echo set_value('id',$this->form_data->id_anggota); ?>"/>
-			</tr>
-			<tr>
-				<td valign="top">User Name (utk login)<span style="color:red;">*</span></td>
-				<td><input type="text" name="user_name" class="text" value="<?php echo set_value('user_name',$this->form_data->user_name); ?>"/>
-			<?php echo form_error('user_name'); ?>
-				</td>
+				<td><input type="text" name="id" class="text" value="<?php echo set_value('id',$this->form_data->id_anggota); ?>"/></td>
+				<inputx type="hidden" name="id" value="<?php echo set_value('id',$this->form_data->id_anggota); ?>"/>
 			</tr>
 			<tr>
 				<td valign="top">Nama<span style="color:red;">*</span></td>
@@ -42,18 +36,34 @@
 			</tr>
 			<tr>
 				<td valign="top">Jenis Kelamin<span style="color:red;">*</span></td>
-				<td><input type="radio" name="jk" value="M" <?php echo set_radio('gender', 'M', $this->form_data->jk == 'M'); ?>/> L
-					<input type="radio" name="jk" value="F" <?php echo set_radio('gender', 'F', $this->form_data->jk == 'F'); ?>/> P
+				<td><input type="radio" name="jk" value="L" <?php echo set_radio('jk', 'M', $this->form_data->jk == 'L'); ?>/> L
+					<input type="radio" name="jk" value="P" <?php echo set_radio('jk', 'F', $this->form_data->jk == 'P'); ?>/> P
 <?php echo form_error('jk'); ?>
 					</td>
 			</tr>
 			<tr>
-				<td valign="top">Tgl Lahir (dd-mm-yyyy)<span style="color:red;">*</span></td>
-				<td><input type="text" name="tgl_lahir" onclick="displayDatePicker('tgl_lahir');" class="text" value="<?php echo set_value('tgl_lahir',$this->form_data->tgl_lahir); ?>"/>
-				<a href="javascript:void(0);" onclick="displayDatePicker('tgl_lahir');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
-<?php echo form_error('tgl_lahir'); ?></td>
+				<td valign="top">TMT aktif (dd-mm-yyyy)<span style="color:red;">*</span></td>
+				<td><input type="text" name="tmt_aktif" onclick="displayDatePicker('tmt_aktif');" class="text" value="<?php echo set_value('tmt_aktif',$this->form_data->tmt_aktif); ?>"/>
+				<a href="javascript:void(0);" onclick="displayDatePicker('tmt_aktif');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
+<?php echo form_error('tmt_aktif'); ?></td>
 				</td>
 			</tr>
+			
+			<tr>
+				<td valign="top">TMT non-aktif (dd-mm-yyyy)<span style="color:red;">*</span></td>
+				<td><input type="text" name="tmt_nonaktif" onclick="displayDatePicker('tmt_nonaktif');" class="text" value="<?php echo set_value('tmt_nonaktif',$this->form_data->tmt_nonaktif); ?>"/>
+				<a href="javascript:void(0);" onclick="displayDatePicker('tmt_nonaktif');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
+<?php echo form_error('tmt_aktif'); ?></td>
+				</td>
+			</tr>
+			
+			<tr>
+				<td valign="top">Password<span style="color:red;">*</span></td>
+				<td><input type="text" name="pass" class="text" value=""/>
+			<?php echo form_error('nama'); ?>
+				</td>
+			</tr>
+			
 			<tr>
 				<td>&nbsp;</td>
 				<td><input type="submit" value="Save"/></td>

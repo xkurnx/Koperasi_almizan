@@ -1,3 +1,15 @@
+*~
+.DS_Store
+.svn
+.gitignore
+.cvs
+*.bak
+*.swp
+Thumbs.db
+
+application/.htaccess
+application/config/*
+application/libraries/*
 */config/development
 */logs/log-*.php
 */logs/!index.html

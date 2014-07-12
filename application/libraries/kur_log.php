@@ -22,9 +22,10 @@ class Kur_log{
 		$operator_id = $this->obj->session->userdata( $this->prefix."sess_userid" );
 		$operator_name = $this->obj->session->userdata( $this->prefix."sess_username" );
 		$log .= " oleh ".$operator_name."(".$operator_id.")";
-		$activity = array('user_id' => $object_id,
+		$activity = array('anggota_id' => $object_id,
 						  'aktivitas' => $log,
-						  'datetime' => date('Y-m-d h:i:s'));	
+						  'ip' => $_SERVER['REMOTE_ADDR'],		
+						  'waktu' => date('Y-m-d h:i:s'));	
 				  
 		$this->db1->insert($this->tbl_log, $activity);
 		return $this->db1->insert_id();

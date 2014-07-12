@@ -9,6 +9,12 @@ body.login{
 	background:none;
 }
 
+
+.hide{
+	display:none;
+}
+
+
 /* login box */
 
 .login .wrapper{
@@ -30,7 +36,17 @@ border-radius: 5px;
 .login .wrapper .loginBox input.text{
 	width:200px;	
 	height:24px;
-	font-size:16px;
+	font-size:14px;	
+}
+
+input.text{
+	border-radius: 3px;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+
+input.text:focus{
+	box-shadow:0 0 5px #BED6F8, 0 2px 2px #8F8F8F inset;
+	
 }
 
 .login .wrapper .loginBox #wp-submit{
@@ -55,7 +71,7 @@ border-radius: 5px;
 
 .wrapper{
 		margin:0px auto;
-		width:1000px;
+		width:1060px;
 }
 
 .header{
@@ -120,9 +136,8 @@ div.infoValidasi{
 	font-size:12px;
 }
 div.content {
-	width:960px;
 	background:#fff;
-	padding:10px 30px;
+	padding:10px;
 }
 div.content h1 {
 	font-size:14px;
@@ -135,7 +150,6 @@ div.content h1 {
 div.content div.data table {
 	border:2px solid #000;
 	background:#fff;
-	width:960px;
 }
 
 
@@ -156,12 +170,19 @@ div.content div.data table th {
 
 /* table small, for long report */
 
+/* zebra style */
+div.content div.data table.report tr.odd{
+	background:#CCC;
+}
+
 div.content div.data table.report th,
 div.content div.data table.report td{
 	font-size:0.7em;
 	padding:1px 4px;
 }
 
+td.red{ background:red}
+td.yellow{ background:yellow}
 
 div.paging {
 	font-size: 9pt;
@@ -188,11 +209,12 @@ div.success {
 	color:#060;
 }
 
-a.update, a.delete, a.add, a.view, a.back {
+a.update, a.delete, a.add, a.view, a.back,a.xls,a.zip {
 	font-size: 9pt;
 	color:#900;
 	font-wight:bold;
 	padding-left:20px;
+	padding:2px 20px;
 	text-decoration: none;
 }
 a.update {
@@ -204,12 +226,25 @@ a.delete {
 a.add {
 	background:url(images/add.png) left center no-repeat;
 }
+a.print {
+	background:url(images/print.png) left center no-repeat;
+}
+
 a.view {
 	background:url(images/view.png) left center no-repeat;
 }
 a.back {
 	background:url(images/prev.gif) left center no-repeat;
 }
+
+a.xls{
+	background:url(../i/icon_xls_small.gif) left center no-repeat;	
+}
+
+a.zip{
+	background:url(../i/zipOne.png) left center no-repeat;	
+}
+
 a.update:hover, a.delete:hover, a.add:hover, a.view:hover {
 	color:#000;
 }
@@ -334,6 +369,19 @@ div.content div.data table.small .head{
 
 .contentSource{display:none}
 
+
+ul.menuSubLaporan{
+	display:block;
+	font-size:12px;
+}
+
+ul.menuSubLaporan li{
+	float:left;
+	margin-right:30px;
+	padding:0px;
+	margin-bottom:10px;
+}
+
 ul.tabBulanan{
 	margin:0px;
 	display:block;
@@ -355,4 +403,25 @@ ul.tabBulanan li.active{
 
 ul.tabBulanan li a{
 	color:#fff;	
+}
+
+.KasKeluarForm{
+	font-size:14px;
+	margin-bottom:10px;
+}
+
+.KasKeluarForm input{
+	font-size:13px;
+}
+
+.KasKeluarForm input.nama_trans{
+	width:300px;
+}
+.KasKeluarForm input.nilai_trans{
+	text-align:right;
+	width:100px;
+}
+
+.KasKeluarForm input.tgl_trans{
+	width:80px;
 }
