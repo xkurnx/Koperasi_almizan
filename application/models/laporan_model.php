@@ -229,7 +229,7 @@ class Laporan_model extends CI_Model {
 				and d_simpanan.kode_simpanan='SP'
 				order by tgl,nama asc
 				";	 
-		echo "<pre>$sql</pre>";			
+		#echo "<pre>$sql</pre>";			
 		$data = $this->db->query($sql);
 		return $data;		
 		}
