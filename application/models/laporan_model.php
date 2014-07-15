@@ -216,9 +216,20 @@ class Laporan_model extends CI_Model {
 				and upper(ket) <> 'DATA AWAL MIGRASI'
 				and nilai < 0
 				and DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
+				union
+				/* simpanan Pokok Anggota Baru*/
+				select 'KM' jenis,DATE_FORMAT(tgl_trans, '%m-%d-%Y') tgl,
+				concat('Setor ',kode_simpanan,' ',nama) nama,0 SW,0 SK,0 id_anggota,0 pokok_pinj,0 laba_pinj,
+				0 pokok_bl,0 pokok_rk,0 jasa_bl,0 jasa_rk,
+				0 denda,abs(nilai),0 pengeluaran
+				from m_anggota,d_simpanan
+				where m_anggota.id_anggota=d_simpanan.id_anggota
+				and upper(ket) <> 'DATA AWAL MIGRASI'
+				and DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
+				and d_simpanan.kode_simpanan='SP'
 				order by tgl,nama asc
 				";	 
-		#echo "<pre>$sql</pre>";			
+		echo "<pre>$sql</pre>";			
 		$data = $this->db->query($sql);
 		return $data;		
 		}
