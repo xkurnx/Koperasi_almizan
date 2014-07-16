@@ -144,7 +144,7 @@ class Laporan_model extends CI_Model {
 					from d_berek
 					where  upper(ifnull(ket,0)) <> 'DATA AWAL MIGRASI'
 					and DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
-					and nilai>0
+					and nilai >= 0
 					group by id_anggota
 					) r_berek
 					on m_anggota.id_anggota = r_berek.id_anggota	
