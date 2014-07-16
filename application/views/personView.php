@@ -15,7 +15,7 @@
 
 <?php
 // tgl transaksi default setiap tgl 5
-$tgl_default = "05-11-2013";
+$tgl_default = "05-12-2013";
 ?>
 </head>
 <body>
@@ -49,11 +49,11 @@ $tgl_default = "05-11-2013";
 				<td>
 				<table class='w400 noBorder'>
 				<?php
-				 echo "<tr><td>Simpanan Pokok <a href=\"javascript:add_simpanan('SP')\" class='add'>tambah transaksi (khusus agt baru / pengmb. aset)</a></td></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/SP/'.$person->id_anggota)."'>".number_format($simpanan->T_SP,2,',','.')."</a></td></tr>";
-				 echo "<tr><td>Simpanan Wajib <a href=\"javascript:add_simpanan('SW','65000')\" class='add'>tambah transaksi</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/SW/'.$person->id_anggota)."'>".number_format($simpanan->T_SW,2,',','.')."</a></td></tr>";
-				 echo "<tr><td>Simpanan Sukarela <a href=\"javascript:add_simpanan('SK','50000')\" class='add'>tambah transaksi</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/SK/'.$person->id_anggota)."'>".number_format($simpanan->T_SK,2,',','.')."</a></td></tr>";
-				 echo "<tr><td>Jasa Simpanan Sukarela <a href=\"javascript:add_simpanan('JS','0')\" class='add'>tambah transaksi (khusus pengmb. aset)</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/JS/'.$person->id_anggota)."'>".number_format($simpanan->T_JS,2,',','.')."</a></td></tr>";				 
-				 echo "<tr><td>Kompensasi Sukarela <a href=\"javascript:add_simpanan('KP','-".$simpanan->T_KP."')\" class='add'>tambah transaksi (khusus pengmb. aset)</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/KP/'.$person->id_anggota)."'>".number_format($simpanan->T_KP,2,',','.')."</a></td></tr>";				 
+				 echo "<tr><td>Simpanan Pokok <a href=\"javascript:add_simpanan('SP',20000)\" class='add'>Anggota agt baru</a> | <a href=\"javascript:add_simpanan('SP',-20000)\" class=''>pengmb. aset</a></td></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/SP/'.$person->id_anggota)."'>".number_format($simpanan->T_SP,2,',','.')."</a></td></tr>";
+				 echo "<tr><td>Simpanan Wajib <a href=\"javascript:add_simpanan('SW','65000')\" class='add'>tambah transaksi</a> | <a href=\"javascript:add_simpanan('SW','-".$simpanan->T_SW."')\">Pengmb. aset</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/SW/'.$person->id_anggota)."'>".number_format($simpanan->T_SW,2,',','.')."</a></td></tr>";
+				 echo "<tr><td>Simpanan Sukarela <a href=\"javascript:add_simpanan('SK','50000')\" class='add'>tambah transaksi </a> | <a href=\"javascript:add_simpanan('SK','-".$simpanan->T_SK."')\">Pengmb. aset</a></a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/SK/'.$person->id_anggota)."'>".number_format($simpanan->T_SK,2,',','.')."</a></td></tr>";
+				 echo "<tr><td>Jasa Simpanan Sukarela <a href=\"javascript:add_simpanan('JS','-".$simpanan->T_JS."')\" class=''>pengmb. aset</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/JS/'.$person->id_anggota)."'>".number_format($simpanan->T_JS,2,',','.')."</a></td></tr>";				 
+				 echo "<tr><td>Kompensasi Murabahah <a href=\"javascript:add_simpanan('KP','-".$simpanan->T_KP."')\" class=''>pengmb. aset</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/simpanan/KP/'.$person->id_anggota)."'>".number_format($simpanan->T_KP,2,',','.')."</a></td></tr>";				 
 				 echo "<tr><td>Jumlah Simpanan</td><td class='w20'>Rp.</td><td class='uang'> <strong>".number_format($simpanan->T_SP + $simpanan->T_SW + $simpanan->T_SK + $simpanan->T_JS,2,',','.')."</strong></td></tr>";
 				?>
 				</table>
@@ -82,8 +82,9 @@ $tgl_default = "05-11-2013";
 				
 				<?php
 				foreach ($murabahah as $data ):
-					$html = ( $data->diangsur >= $data->jual or $data->diangsur + 4 >= $data->jual )?" <span class='lunas'>- lunas</span>":"<a href=\"javascript:add_angsuran($data->id_mrbh,'MRBH','".($data->jual/$data->jgk)."')\" class='add'>tbh trans</a>";
-					echo "<tr><td>$data->ket <br/ >$html </td>";
+					$html = ( $data->diangsur >= $data->jual or $data->diangsur + 4 >= $data->jual )?" <span class='lunas'>- lunas</span>":"<a href=\"javascript:add_angsuran($data->id_mrbh,'MRBH','".($data->jual/$data->jgk)."')\" class='add'>tbh cicilan</a>";
+					$ubah_link = "<a href=\"javascript:showMrbhEditForm('$data->id_mrbh','');\">ubah</a>"; 
+					echo "<tr><td>$data->ket ($ubah_link) <br/ >$html </td>";
 					echo "<td>$data->jgk</td><td>$data->angsuran_ke</td>";
 					echo "<td class='w20'>Rp.</td><td class='uang'>".number_format($data->jual,2,',','.')."</td>";
 					echo "<td class='w20'>Rp.</td><td class='uang'>".number_format($data->jual/$data->jgk,2,',','.')."</td>";
@@ -120,7 +121,7 @@ $tgl_default = "05-11-2013";
 				<td valign="top">Transaksi Terakhir</td>
 				<td>
 				<table class='noBorder w400'>
-				<tr class='head'><td>Tgl Transaksi</td><td>Jenis</td><td colspan="2">Rupiah</td><td>Keterangan</td><td></td></tr>
+				<tr class='head'><td>Tgl Transaksi</td><td class="w200">Jenis</td><td colspan="2">Rupiah</td><td>Keterangan</td><td></td></tr>
 				<?php
 				foreach ($trans as $data ):
 					$html_del = ( $data->is_deletable == 0 ) ? "":"<a class='delete' href=\"javascript:show_confirm('Yakin Akan Menghapus?','".site_url('trans/del/'.$data->tabel.'/'.$data->idx.'/'.$person->id_anggota)."')\">del</a>";
@@ -248,6 +249,7 @@ $tgl_default = "05-11-2013";
 			<input type="text" value="" class="text tgl_trans" name="tgl_trans_murabahah"><a onclick="displayDatePicker('tgl_trans_murabahah');"><img src="<?php echo base_url(); ?>res/css/images/calendar.png" alt="calendar" border="0"></a>
 			<input type="hidden" name="jenis_trans" value="create_murabahah">
 			<input type="hidden" name="kode_berek" value="">
+			<input type="hidden" name="id_mrbh" value="">
 			<input type="hidden" name="id_anggota" value="<?php echo $person->id_anggota;?>">
 			<br />Catatan<br />
 			<textarea name="catatan" cols=20 rows=3></textarea>
