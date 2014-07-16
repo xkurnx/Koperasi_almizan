@@ -285,6 +285,10 @@ div.content div.data table td.w20{
 	width:20px;
 }
 
+div.content div.data table td.w100{
+	width:100px;
+}
+
 div.content div.data table td.w200{
 	width:200px;
 }
