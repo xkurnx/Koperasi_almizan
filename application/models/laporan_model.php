@@ -82,7 +82,7 @@ class Laporan_model extends CI_Model {
 		$tgl_satu = "01-".substr($periode,-2)."-".substr($periode,0,4);
 		$sql = "select 
 				jenis,
-				date_format(tgl,'%m-%d-%Y') tgl,
+				date_format(tgl,'%d-%m-%Y') tgl,
 				nama,
 				id_anggota,
 				IFNULL(SW,0) SW,
@@ -97,7 +97,7 @@ class Laporan_model extends CI_Model {
 				IFNULL(pemasukan,0) pemasukan,			
 				IFNULL(pengeluaran,0) pengeluaran	
 				from
-				 (	select 'KM' jenis,STR_TO_DATE('$tgl_satu', '%m-%d-%Y') tgl,
+				 (	select 'KM' jenis,STR_TO_DATE('$tgl_satu', '%d-%m-%Y') tgl,
 				    concat('dr ',nama) nama,SW,SK,m_anggota.id_anggota,pokok_pinj,laba_pinj,
 				   pokok_bl,pokok_rk,jasa_bl,jasa_rk,
 					denda,0 pemasukan,0 pengeluaran
@@ -144,6 +144,7 @@ class Laporan_model extends CI_Model {
 					from d_berek
 					where  upper(ifnull(ket,0)) <> 'DATA AWAL MIGRASI'
 					and DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
+					and nilai>0
 					group by id_anggota
 					) r_berek
 					on m_anggota.id_anggota = r_berek.id_anggota	
@@ -207,7 +208,7 @@ class Laporan_model extends CI_Model {
 				) harian	
 				union
 				/* tarik simpanan */
-				select 'KK' jenis,DATE_FORMAT(tgl_trans, '%m-%d-%Y') tgl,
+				select 'KK' jenis,DATE_FORMAT(tgl_trans, '%d-%m-%Y') tgl,
 				concat('Trk ',kode_simpanan,' ',nama) nama,0 SW,0 SK,0 id_anggota,0 pokok_pinj,0 laba_pinj,
 				0 pokok_bl,0 pokok_rk,0 jasa_bl,0 jasa_rk,
 				0 denda,0,abs(nilai) pengeluaran
@@ -217,8 +218,20 @@ class Laporan_model extends CI_Model {
 				and nilai < 0
 				and DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
 				union
+				/* tarik JASA BELANJA DAN REKENING */
+				select 'KK' jenis,DATE_FORMAT(tgl_trans, '%d-%m-%Y') tgl,
+				concat('Trk JASA ',kode_berek,' ',nama) nama,0 SW,0 SK,0 id_anggota,0 pokok_pinj,0 laba_pinj,
+				0 pokok_bl,0 pokok_rk,0 jasa_bl,0 jasa_rk,
+				0 denda,0,abs(nilai) pengeluaran
+				from m_anggota,d_berek
+				where m_anggota.id_anggota=d_berek.id_anggota
+				and upper(ket) <> 'DATA AWAL MIGRASI'
+				and nilai < 0
+				and DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
+				union
+				
 				/* simpanan Pokok Anggota Baru*/
-				select 'KM' jenis,DATE_FORMAT(tgl_trans, '%m-%d-%Y') tgl,
+				select 'KM' jenis,DATE_FORMAT(tgl_trans, '%d-%m-%Y') tgl,
 				concat('Setor ',kode_simpanan,' ',nama) nama,0 SW,0 SK,0 id_anggota,0 pokok_pinj,0 laba_pinj,
 				0 pokok_bl,0 pokok_rk,0 jasa_bl,0 jasa_rk,
 				0 denda,abs(nilai),0 pengeluaran
@@ -227,6 +240,7 @@ class Laporan_model extends CI_Model {
 				and upper(ket) <> 'DATA AWAL MIGRASI'
 				and DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
 				and d_simpanan.kode_simpanan='SP'
+				and nilai>0
 				order by tgl,nama asc
 				";	 
 		#echo "<pre>$sql</pre>";			
@@ -309,7 +323,7 @@ class Laporan_model extends CI_Model {
 									) as a 
                   on a.id_mrbh=m.id_mrbh 
 					where 1=1
-					and diangsur + 5 < jual -- toleransi 5 rupiah";
+					and diangsur + 10 < jual -- toleransi 5 rupiah";
 		$data = $this->db->query($sql);
 		return $data;
 		}
