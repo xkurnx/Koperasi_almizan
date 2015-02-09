@@ -66,7 +66,6 @@ $tgl_default = "05-12-2013";
 				<?php
 				  echo "<tr><td>Jasa Rekening <a href=\"javascript:add_berek('RK')\" class='add'>tambah transaksi</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/berek/RK/'.$person->id_anggota)."'>".number_format($berek->T_RK,2,',','.')."</a></td></tr>";
 				  echo "<tr><td>Jasa Belanja <a href=\"javascript:add_berek('BL')\" class='add'>tambah transaksi</a></td><td class='w20'>Rp.</td><td class='uang'><a href='".site_url('history/berek/BL/'.$person->id_anggota)."'>".number_format($berek->T_BL,2,',','.')."</a></td></tr>";
-				  
 				?>
 				</table>
 				</td>
