@@ -39,12 +39,8 @@
 			</li>       		
 			</ul>
 		</li>
-		<li><a class='laporan' href="<?php echo site_url('laporan');?>">Laporan</a>
-			<ul>
-					<li><a href="<?php echo site_url('laporan/transaksi_harian/'.date('Ym'));?>">Transaksi Harian</a></li>
-					<li><a href="<?php echo site_url('laporan/rekap_simpanan/'.date('Ym'));?>">Rekap Simpanan</a></li>
-			</ul>
-		</li>	
+		<li><a href="<?php echo site_url('laporan/transaksi_harian/'.date('Ym'));?>">Transaksi Harian</a></li>
+		<li><a href="<?php echo site_url('laporan/rekap_simpanan/'.date('Ym'));?>">Rekap Simpanan</a></li>
 		
 </ul>		
 	</div>

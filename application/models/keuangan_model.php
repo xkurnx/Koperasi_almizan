@@ -71,6 +71,8 @@ class Keuangan_model extends CI_Model {
 				sum(case when kode_simpanan='SW' then nilai end) as T_SW,
 				sum(case when kode_simpanan='SK' then nilai end) as T_SK,
 				sum(case when kode_simpanan='KP' then nilai end) as T_KP,
+				sum(case when kode_simpanan='KP_BL' then nilai end) as T_KP_BL,
+				sum(case when kode_simpanan='KP_RK' then nilai end) as T_KP_RK,
 				sum(case when kode_simpanan='JS' then nilai end) as T_JS				
 				from d_simpanan
 				where id_anggota=$id
@@ -82,9 +84,8 @@ class Keuangan_model extends CI_Model {
 	function fetch_jumlah_berek_id($id){
 		
 		$query_tgl_trans = ($this->periode == '' ) ? "":"and date_format(tgl_trans,'%Y%m')<='$this->periode'";	
-		/* yang ditampilkan adalah 50%, karena 50% sisanya telah/akan dibagikan saat Tutup Buku */
-		$sql = "select sum(case when kode_berek='BL' then nilai end)*0.5 as T_BL,
-				sum(case when kode_berek='RK' then nilai end)*0.5 as T_RK				
+		$sql = "select sum(case when kode_berek='BL' then nilai end) as T_BL,
+				sum(case when kode_berek='RK' then nilai end)as T_RK				
 				from d_berek
 				where id_anggota=$id
 				$query_tgl_trans
@@ -99,7 +100,7 @@ class Keuangan_model extends CI_Model {
 		NILAI * 0.5 karena 0.5 sisanya dibagikan saat proses tutup buku bulanan 
 		*/
 		$sql = "select tgl_trans,kode_berek, 
-				case when nilai < 0 then 'penarikan' else 'penyetoran' end as jenis,nilai*0.5 nilai,ket
+				case when nilai < 0 then 'penarikan' else 'penyetoran' end as jenis,nilai,ket
 				from d_berek				
 				where id_anggota=$id
 				and kode_berek='$jenis'
@@ -253,6 +254,7 @@ class Keuangan_model extends CI_Model {
 		30% dari laba akan kembali kepada anggota tersebut 
 		Laba = Nilai yang diangsur-modal tiap angsuran
 		****************************************************/
+		 /* KOMPENSASI MURABAHAH */
 		$sql_kompensasi = "insert into d_simpanan(id_anggota,nilai,kode_simpanan,ket,tgl_trans,tgl_input,ip)
 							select id_anggota,sum(diangsur-((modal*diangsur/jual)))*0.3,'KP','Konpensasi $text_periode',str_to_date('$tgl_akhir 01:01:01','%Y%m%d %H:%i:%s'),now(),'server'
 												from m_murabahah  m, (
@@ -265,6 +267,18 @@ class Keuangan_model extends CI_Model {
 												 where a.id_mrbh=m.id_mrbh 
 									   group by id_anggota";
 		$data = $this->db->query($sql_kompensasi);	 
+		
+		/* 
+			KOMPENSASI BELANJA DAN REKENING
+		*/
+		
+		$sql_kompensasi = "	insert into d_simpanan(id_anggota,nilai,kode_simpanan,ket,tgl_trans,tgl_input,ip)
+							select id_anggota,sum(nilai*0.5),concat('KP_',kode_berek),'Konpensasi BL/RK $text_periode',str_to_date('$tgl_akhir 01:01:01','%Y%m%d %H:%i:%s'),now(),'server'
+												from d_berek
+                            where DATE_FORMAT(tgl_trans, '%Y%m')='$periode'
+									   group by id_anggota";
+		$data = $this->db->query($sql_kompensasi);
+		
 		#echo "<pre>$sql_kompensasi</pre>";		
 		/**/
 		#exit;
