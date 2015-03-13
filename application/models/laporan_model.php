@@ -327,6 +327,25 @@ class Laporan_model extends CI_Model {
 		$data = $this->db->query($sql);
 		return $data;
 		}
+		
+		function rat_kembali_aset($tahun){
+			$sql = "select b.nama,a.* from (
+					select id_anggota,
+					sum( case when kode_simpanan='KP' then nilai else 0 end) KP_MRBH ,
+					sum( case when kode_simpanan='KP_BL' then nilai else 0 end) KP_BL, 
+					sum( case when kode_simpanan='KP_RK' then nilai else 0 end) KP_RK,
+					sum( case when kode_simpanan='JS' then nilai else 0 end) JS_SK
+					from d_simpanan
+					where year(tgl_trans)='$tahun'
+					group by id_anggota
+					) a, m_anggota b
+					where a.id_anggota=b.id_anggota
+					and DATE_ADD(COALESCE(tmt_nonaktif,STR_TO_DATE('20201231', '%Y%m%d')),INTERVAL 1 MONTH) >= STR_TO_DATE('".$tahun."1231', '%Y%m%d')  /* sembunyikan yg udah non aktif  */	
+							";
+			
+			$data = $this->db->query($sql);
+			return $data;
+		}
 	 
 	}
 ?>	 
